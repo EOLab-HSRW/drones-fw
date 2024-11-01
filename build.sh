@@ -4,9 +4,6 @@ set -e
 
 NAME_OPTIONS=("platypus")
 ROOT_DIR=$PWD
-DRONE_NAME=${1:?"DRONE_NAME argument is mandatory"} # TODO check for valid drone name
-PX4_VERSION="v1.15.0" # TODO: DRONE SPECIFIC
-CUSTOM_VERSION="0.0.1" # TODO: DRONE SPECIFIC
 
 usage() {
   echo "Usage: $0"
@@ -41,7 +38,6 @@ build_firmware() {
 
     local temp_tag="${px4_version}-${drone_fw_version}"
 
-    # Navigate to PX4-Autopilot directory
     cd $ROOT_DIR/PX4-Autopilot
 
     echo "Checking out PX4 firmware version: $px4_version"
