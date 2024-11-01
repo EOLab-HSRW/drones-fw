@@ -4,12 +4,9 @@ set -e
 
 NAME_OPTIONS=("platypus")
 ROOT_DIR=$PWD
-<<<<<<< HEAD
-=======
 DRONE_NAME=${1:?"DRONE_NAME argument is mandatory"} # TODO check for valid drone name
 PX4_VERSION="v1.15.0" # TODO: DRONE SPECIFIC
 CUSTOM_VERSION="0.0.1" # TODO: DRONE SPECIFIC
->>>>>>> e1dcf08802dce9e8278e3d2369b42916fa1c0bd9
 
 usage() {
   echo "Usage: $0"
