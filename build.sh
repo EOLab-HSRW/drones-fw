@@ -9,6 +9,7 @@ usage() {
   echo "Usage: $0"
   echo ""
   echo "Available drone names:"
+
   for option in "${NAME_OPTIONS[@]}"; do
       echo "    - ${option}"
   done
@@ -39,8 +40,8 @@ build_firmware() {
     local temp_tag="${px4_version}-${drone_fw_version}"
 
     cd $ROOT_DIR/PX4-Autopilot
-
     echo "Checking out PX4 firmware version: $px4_version"
+
     git fetch --all --tags
     git checkout $px4_version
     git submodule sync --recursive
@@ -53,10 +54,18 @@ build_firmware() {
     sudo apt -y install gcc-arm-none-eabi # check https://github.com/PX4/PX4-Autopilot/issues/15719#issuecomment-1582186108
 
     cd $ROOT_DIR
+
     cp -r boards/* $ROOT_DIR/PX4-Autopilot/boards/
+    cp -r ROMFS/* $ROOT_DIR/PX4-Autopilot/ROMFS/
+
+    local board_conf=$ROOT_DIR/PX4-Autopilot/boards/$vendor/$model/init/
+    # apply the correct naming convention. See https://docs.px4.io/main/en/hardware/porting_guide.html#flight-controller-configuration-file-layout
+    cp $board_conf/rc.board.$drone_name $board_conf/rc.board_extras
 
     cd $ROOT_DIR/PX4-Autopilot
 
+    rm -rf build
+    make clean
     local target="${vendor}_${model}_${drone_name}"
     make $target
 
@@ -71,7 +80,9 @@ build_firmware() {
     echo "==============================================="
     echo "The firmware file has been created in ${output}"
     echo "==============================================="
+
 }
+
 
 DRONE_NAME=$1
 
@@ -91,14 +102,17 @@ case "$DRONE_NAME" in
         VENDOR="px4"
         MODEL="fmu-v3"
         ;;
+
     *) echo "Error: Unknown drone name '$1'."; usage ;;
 esac
 
 build_firmware "$PX4_VERSION" "$DRONE_FW_VERSION" "$VENDOR" "$MODEL" "$DRONE_NAME"
 
+
 # if [ "$1" == "all" ]; then
   # Loop through all options except 'all' and execute each action
   # for action in "${VALID_OPTIONS[@]}"; do
+
   #   if [ "$action" != "all" ]; then
   #     perform_action "$action"
   #   fi
