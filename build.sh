@@ -110,17 +110,3 @@ case "$DRONE_NAME" in
 esac
 
 build_firmware "$PX4_VERSION" "$DRONE_FW_VERSION" "$VENDOR" "$MODEL" "$DRONE_NAME"
-
-
-# if [ "$1" == "all" ]; then
-  # Loop through all options except 'all' and execute each action
-  # for action in "${VALID_OPTIONS[@]}"; do
-
-  #   if [ "$action" != "all" ]; then
-  #     perform_action "$action"
-  #   fi
-  # done
-# else
-#
-#   build_firmware "$1"
-# fi
