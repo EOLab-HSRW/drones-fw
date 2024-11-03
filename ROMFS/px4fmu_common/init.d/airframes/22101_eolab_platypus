@@ -15,8 +15,7 @@
 # @output Motor8 motor 8
 #
 # @maintainer Harley Lara <contact@harleylara.com>
-#
-# @board bitcraze_crazyflie exclude
+# @url https://github.com/EOLab-HSRW/drones/tree/main/platypus
 #
 
 . ${R}etc/init.d/rc.mc_defaults

@@ -57,6 +57,7 @@ build_firmware() {
 
     cp -r boards/* $ROOT_DIR/PX4-Autopilot/boards/
     cp -r ROMFS/* $ROOT_DIR/PX4-Autopilot/ROMFS/
+    patch $ROOT_DIR/PX4-Autopilot/ROMFS/px4fmu_common/init.d/airframes/CMakeLists.txt < $ROOT_DIR/airframes.patch
 
     local board_conf=$ROOT_DIR/PX4-Autopilot/boards/$vendor/$model/init/
     # apply the correct naming convention. See https://docs.px4.io/main/en/hardware/porting_guide.html#flight-controller-configuration-file-layout
@@ -69,9 +70,11 @@ build_firmware() {
     local target="${vendor}_${model}_${drone_name}"
     make $target
 
-    # # restore the original px4 tag
+    # restore the original px4 tag
     git tag -d "$temp_tag"
     git checkout "$px4_version"
+    # restore airframes patch
+    patch -R $ROOT_DIR/PX4-Autopilot/ROMFS/px4fmu_common/init.d/airframes/CMakeLists.txt < $ROOT_DIR/airframes.patch
 
     local output="${ROOT_DIR}/${drone_name}_v${drone_fw_version}.px4"
     cp $ROOT_DIR/PX4-Autopilot/build/$target/$target.px4 $output
