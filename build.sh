@@ -2,11 +2,11 @@
 
 set -e
 
-NAME_OPTIONS=("platypus")
+NAME_OPTIONS=("platypus" "all")
 ROOT_DIR=$PWD
 
 usage() {
-  echo "Usage: $0"
+  echo "Usage: $0 DRONE_NAME"
   echo ""
   echo "Available drone names:"
 
@@ -22,7 +22,7 @@ if [ -z "$1" ]; then
 fi
 
 if [[ ! " ${NAME_OPTIONS[@]} " =~ " $1 " ]]; then
-  echo "Error: Invalid drone name '$1'."
+  echo "Error: Invalid drone name '$1'"
   usage
 fi
 
@@ -86,10 +86,10 @@ build_firmware() {
 
 }
 
+build_drone() {
+    local drone_name=$1
 
-DRONE_NAME=$1
-
-case "$DRONE_NAME" in
+    drone_name=$1
 
     # To add a new drone the following variables are mandatory:
     # PX4_VERSION: the version of the PX4 firmware to build
@@ -98,15 +98,36 @@ case "$DRONE_NAME" in
     # VENDOR: The manufacturer of the board. The vendor name for Pixhawk series boards is "px4".
     # MODEL: The board model.
     # see https://docs.px4.io/main/en/dev_setup/building_px4.html#px4-make-build-targets
-    platypus)
-        PX4_VERSION="v1.15.0"
-        DRONE_FW_VERSION="0.0.1"
+    case "$drone_name" in
+        platypus)
+            PX4_VERSION="v1.15.0"
+            DRONE_FW_VERSION="0.0.1"
 
-        VENDOR="px4"
-        MODEL="fmu-v3"
-        ;;
+            VENDOR="px4"
+            MODEL="fmu-v3"
+            ;;
+        # demo)
+        #     PX4_VERSION="v1.12.3"
+        #     DRONE_FW_VERSION="1.2.0"
+        #     VENDOR="px4"
+        #     MODEL="fmu-v5"
+        #     ;;
+        *)
+            echo "Error: Unknown drone name '$1'."
+            usage
+            ;;
+    esac
 
-    *) echo "Error: Unknown drone name '$1'."; usage ;;
-esac
+    build_firmware "$PX4_VERSION" "$DRONE_FW_VERSION" "$VENDOR" "$MODEL" "$drone_name"
+}
 
-build_firmware "$PX4_VERSION" "$DRONE_FW_VERSION" "$VENDOR" "$MODEL" "$DRONE_NAME"
+if [ "$1" == "all" ]; then
+    echo "build all firmwares"
+    for drone in "${NAME_OPTIONS[@]}"; do
+        if [ "$drone" != "all" ]; then
+            build_drone "$drone"
+        fi
+    done
+else
+    build_drone "$1"
+fi
