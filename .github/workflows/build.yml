@@ -21,6 +21,11 @@ jobs:
         run: |
           chmod +x ./build.sh
           ./build.sh all
+      - name: Delete old release assets
+        uses: mknejp/delete-release-assets@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag: latest
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
