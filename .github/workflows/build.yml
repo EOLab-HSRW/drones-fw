@@ -9,7 +9,7 @@ jobs:
   build-and-release:
     runs-on: ubuntu-22.04
     steps:
-      - name: Check out the code
+      - name: Checkout
         uses: actions/checkout@v3
         with:
           submodules: recursive
@@ -17,7 +17,17 @@ jobs:
         run: |
           git config --global user.email "github-actions[bot]"
           git config --global user.name "GitHub Actions Bot"
-      - name: Run generation script
+      - name: Build Firmwares
         run: |
           chmod +x ./build.sh
           ./build.sh all
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: "*.px4"
+          tag_name: latest
+          name: Latest Firmwares
+          draft: false
+          body: "This is an auto-generated set of our latest firmwares for all our drones"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
