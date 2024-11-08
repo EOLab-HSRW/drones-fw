@@ -1,5 +1,7 @@
 # EOLab's Drones Firmwares
 
+![Build Firmwares](https://github.com/EOLab-HSRW/drones-fw/actions/workflows/build/badge.svg)
+
 ## Build Firmware Locally
 
 ```console
