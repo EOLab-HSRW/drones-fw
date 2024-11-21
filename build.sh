@@ -2,7 +2,7 @@
 
 set -e
 
-NAME_OPTIONS=("platypus" "all")
+NAME_OPTIONS=("platypus" "sar" "all")
 ROOT_DIR=$PWD
 
 usage() {
@@ -105,6 +105,13 @@ build_drone() {
 
             VENDOR="px4"
             MODEL="fmu-v3"
+            ;;
+        sar)
+            PX4_VERSION="v1.15.0"
+            DRONE_FW_VERSION="0.0.1"
+
+            VENDOR="px4"
+            MODEL="fmu-v6x"
             ;;
         # demo)
         #     PX4_VERSION="v1.12.3"

@@ -1,0 +1,35 @@
+#!/bin/sh
+#
+# @name EOLab SAR
+#
+# @type Quadrotor x
+# @class Copter
+#
+# @output Motor1 motor 1
+# @output Motor2 motor 2
+# @output Motor3 motor 3
+# @output Motor4 motor 4
+#
+# @maintainer Harley Lara <contact@harleylara.com>
+# @url https://github.com/EOLab-HSRW/drones/tree/main/sar
+#
+
+. ${R}etc/init.d/rc.mc_defaults
+
+
+# Square quadrotor X PX4 numbering
+param set-default CA_ROTOR_COUNT 4
+
+param set-default CA_ROTOR0_PX 0.084853
+param set-default CA_ROTOR0_PY 0.084853
+
+param set-default CA_ROTOR1_PX -0.084853
+param set-default CA_ROTOR1_PY -0.084853
+
+param set-default CA_ROTOR2_PX 0.084853
+param set-default CA_ROTOR2_PY -0.084853
+param set-default CA_ROTOR2_KM -0.05
+
+param set-default CA_ROTOR3_PX -0.084853
+param set-default CA_ROTOR3_PY 0.084853
+param set-default CA_ROTOR3_KM -0.05
