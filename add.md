@@ -54,12 +54,13 @@ To add a new drone **the following variables are mandatory*:
 #
 
 . ${R}etc/init.d/rc.mc_defaults
-#!/bin/sh
 
 param set-default MAV_0_CONFIG 101
 param set-default MAV_1_CONFIG 0
 
 param set-default RC_CRSF_PRT_CFG 102
+
+# add the rest of the firmware parameters here
 ```
 
 Note: see [PX4-Autopilot/ROMFS/px4fmu_common/init.d/airframes](https://github.com/PX4/PX4-Autopilot/tree/main/ROMFS/px4fmu_common/init.d/airframes) to check for already used `UID`.
