@@ -11,11 +11,11 @@
 # @output Motor4 motor 4
 #
 # @maintainer Harley Lara <contact@harleylara.com>
-# @url https://github.com/EOLab-HSRW/drones/tree/main/sar
+# @url https://drones.eolab.de/sar/README.html
 #
 
 . ${R}etc/init.d/rc.mc_defaults
-
+. ${R}etc/init.d/rc.radiomaster_tx16s # radio params
 
 # Square quadrotor X PX4 numbering
 param set-default CA_ROTOR_COUNT 4
@@ -42,12 +42,3 @@ param set-default PWM_AUX_FUNC4 104
 
 # -3: DShot600
 param set-default PWM_AUX_TIM0 -3
-
-################
-# RADIO
-################
-
-param set-default MAV_0_CONFIG 101
-param set-default MAV_1_CONFIG 0
-
-param set-default RC_CRSF_PRT_CFG 102

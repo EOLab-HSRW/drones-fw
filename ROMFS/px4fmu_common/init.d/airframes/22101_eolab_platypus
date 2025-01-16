@@ -15,11 +15,11 @@
 # @output Motor8 motor 8
 #
 # @maintainer Harley Lara <contact@harleylara.com>
-# @url https://github.com/EOLab-HSRW/drones/tree/main/platypus
+# @url https://drones.eolab.de/platypus/README.html
 #
 
 . ${R}etc/init.d/rc.mc_defaults
-
+. ${R}etc/init.d/rc.radiomaster_tx16s # radio params
 
 param set-default MAV_TYPE 14
 
@@ -52,12 +52,3 @@ param set-default CA_ROTOR7_KM -0.05
 param set-default CA_ROTOR7_PX -0.35
 param set-default CA_ROTOR7_PY -0.35
 param set-default CA_ROTOR7_PZ 0.05
-
-################
-# RADIO
-################
-
-param set-default MAV_0_CONFIG 101
-param set-default MAV_1_CONFIG 0
-
-param set-default RC_CRSF_PRT_CFG 102
