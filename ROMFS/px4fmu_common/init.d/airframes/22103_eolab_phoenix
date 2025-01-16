@@ -1,0 +1,53 @@
+#!/bin/sh
+#
+# @name EOLab Phoenix
+#
+# @type Hexarotor x
+# @class Copter
+#
+# @output Motor1 motor 1
+# @output Motor2 motor 2
+# @output Motor3 motor 3
+# @output Motor4 motor 4
+# @output Motor5 motor 5
+# @output Motor6 motor 6
+#
+# @maintainer Harley Lara <contact@harleylara.com>
+# @url https://drones.eolab.de/phoenix/README.html
+#
+
+. ${R}etc/init.d/rc.mc_defaults
+
+
+# MAV_TYPE_HEXAROTOR 13
+param set-default MAV_TYPE 13
+
+param set-default CA_ROTOR_COUNT 6
+param set-default CA_ROTOR0_PX 0
+param set-default CA_ROTOR0_PY 0.5
+param set-default CA_ROTOR0_KM -0.05
+param set-default CA_ROTOR1_PX 0
+param set-default CA_ROTOR1_PY -0.5
+param set-default CA_ROTOR2_PX 0.43
+param set-default CA_ROTOR2_PY -0.25
+
+param set-default CA_ROTOR2_KM -0.05
+param set-default CA_ROTOR3_PX -0.43
+param set-default CA_ROTOR3_PY 0.25
+param set-default CA_ROTOR4_PX 0.43
+param set-default CA_ROTOR4_PY 0.25
+param set-default CA_ROTOR5_PX -0.43
+param set-default CA_ROTOR5_PY -0.25
+param set-default CA_ROTOR5_KM -0.05
+
+param set-default PWM_MAIN_FUNC1 101
+
+################
+# RADIO
+################
+
+param set-default MAV_0_CONFIG 101
+param set-default MAV_1_CONFIG 0
+
+param set-default RC_CRSF_PRT_CFG 102
+
