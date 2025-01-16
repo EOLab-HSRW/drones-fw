@@ -35,11 +35,25 @@ To add a new drone **the following variables are mandatory*:
 
 5. In the previous created file `newbie.px4board` specifies the [modules](https://docs.px4.io/main/en/modules/modules_main.html) to enable and/or disable. For complete examples see the file [multicopter.px4board](https://github.com/PX4/PX4-Autopilot/blob/main/boards/px4/fmu-v6x/multicopter.px4board) in the official [`PX4-Autopilot`](https://github.com/PX4/PX4-Autopilot) repo as a reference use case.
 
-6. Create a file with the name `rc.board.<DRONE_NAME>` under `boards/<VENDOR>/<MODEL>/init`. E.g. `boards/px4/fmu-v6x/init/rc.board.newbie`
+6. Create a custom airframe file with the name `<UID>_eolab_<DRONE_NAME>` under `ROMFS/px4fmu_common/init.d/airframes/`. E.g. assuming an `UID` that **is unused** like `22110` we can create the file `ROMFS/px4fmu_common/init.d/airframes/22110_eolab_newbie` for the drone `newbie`. See the official documentation [Adding a Frame Configuration - Section: Configuration File Overview](https://docs.px4.io/main/en/dev_airframes/adding_a_new_frame.html#configuration-file-overview) for a full explanation on the format expected in this file.
 
-7. In the previous created file `rc.board.newbie` set your parameters. E.g.:
+> [!NOTE]
+> As a convention eolab drones must be in the range of [22100 22199]. Check [`airframes.eolab`](./airframes.eolab) for the UID already in use.
 
-```sh rc.board.newbie
+7. In the previous created file `22110_eolab_newbie` set your parameters. E.g.:
+
+```sh 22100_eolab_newbie
+#!/bin/sh
+#
+# @name EOLab Newbie
+#
+# @type Hexarotor x
+# @class Copter
+#
+# @maintainer Harley Lara <contact@harleylara.com>
+#
+
+. ${R}etc/init.d/rc.mc_defaults
 #!/bin/sh
 
 param set-default MAV_0_CONFIG 101
@@ -48,10 +62,8 @@ param set-default MAV_1_CONFIG 0
 param set-default RC_CRSF_PRT_CFG 102
 ```
 
-8. Create a custom airframe file with the name `<UID>_eolab_<DRONE_NAME>` under `ROMFS/px4fmu_common/init.d/airframes/`. E.g. assuming an `UID` that **is unused** like `22110` we can create the file `ROMFS/px4fmu_common/init.d/airframes/22110_eolab_newbie` for the drone `newbie`. See the official documentation [Adding a Frame Configuration - Section: Configuration File Overview](https://docs.px4.io/main/en/dev_airframes/adding_a_new_frame.html#configuration-file-overview) for a full explanation on the format expected in this file.
-
 Note: see [PX4-Autopilot/ROMFS/px4fmu_common/init.d/airframes](https://github.com/PX4/PX4-Autopilot/tree/main/ROMFS/px4fmu_common/init.d/airframes) to check for already used `UID`.
 
-9. Add the new airframe file to the [`airframes.patch`](./airframes.patch) file.
+8. Add the new airframe file to the [`airframes.eolab`](./airframes.eolab) file.
 
 Done.
