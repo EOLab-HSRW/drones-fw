@@ -66,10 +66,6 @@ r airframes.eolab
 }" ./PX4-Autopilot/ROMFS/px4fmu_common/init.d/airframes/CMakeLists.txt
     # END
 
-    local board_conf=$ROOT_DIR/PX4-Autopilot/boards/$vendor/$model/init/
-    # apply the correct naming convention. See https://docs.px4.io/main/en/hardware/porting_guide.html#flight-controller-configuration-file-layout
-    # cp $board_conf/rc.board.$drone_name $board_conf/rc.board_extras
-
     cd $ROOT_DIR/PX4-Autopilot
 
     rm -rf build

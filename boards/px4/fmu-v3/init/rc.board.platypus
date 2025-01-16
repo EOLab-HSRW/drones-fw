@@ -1,8 +1,0 @@
-#!/bin/sh
-
-param set-default MAV_0_CONFIG 101
-param set-default MAV_1_CONFIG 0
-
-param set-default RC_CRSF_PRT_CFG 102
-
-param set-default SYS_AUTOSTART 22101
