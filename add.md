@@ -27,7 +27,7 @@ build_drone() {
 ```
 To add a new drone **the following variables are mandatory*:
 - `PX4_VERSION`: the version of the PX4 firmware to build.
-- `DRONE_FW_VERSION`: the version of the custom firmware version.
+- `DRONE_FW_VERSION`: the version of the custom firmware.
 - `VENDOR`: The manufacturer of the board. E.g. the vendor name for Pixhawk series boards is `px4`.
 - `MODEL`: The board model. E.g. for a `px4` vendor a model might be `fmu-v3` or `fmu-v6x`, it clearly depends on the hardware, see [building px4 - build targets](https://docs.px4.io/main/en/dev_setup/building_px4.html#px4-make-build-targets) for some model options.
 
