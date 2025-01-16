@@ -42,3 +42,12 @@ param set-default PWM_AUX_FUNC4 104
 
 # -3: DShot600
 param set-default PWM_AUX_TIM0 -3
+
+################
+# RADIO
+################
+
+param set-default MAV_0_CONFIG 101
+param set-default MAV_1_CONFIG 0
+
+param set-default RC_CRSF_PRT_CFG 102
