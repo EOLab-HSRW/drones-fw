@@ -57,11 +57,18 @@ build_firmware() {
 
     cp -r boards/* $ROOT_DIR/PX4-Autopilot/boards/
     cp -r ROMFS/* $ROOT_DIR/PX4-Autopilot/ROMFS/
-    patch $ROOT_DIR/PX4-Autopilot/ROMFS/px4fmu_common/init.d/airframes/CMakeLists.txt < $ROOT_DIR/airframes.patch
+
+    # Patch the airframes file
+    # [IMPORTANT] DO NOT CHANGE THE IDENTATION
+    # START
+sed -i "/Quadrotor x/{
+r airframes.eolab
+}" ./PX4-Autopilot/ROMFS/px4fmu_common/init.d/airframes/CMakeLists.txt
+    # END
 
     local board_conf=$ROOT_DIR/PX4-Autopilot/boards/$vendor/$model/init/
     # apply the correct naming convention. See https://docs.px4.io/main/en/hardware/porting_guide.html#flight-controller-configuration-file-layout
-    cp $board_conf/rc.board.$drone_name $board_conf/rc.board_extras
+    # cp $board_conf/rc.board.$drone_name $board_conf/rc.board_extras
 
     cd $ROOT_DIR/PX4-Autopilot
 
@@ -74,7 +81,7 @@ build_firmware() {
     git tag -d "$temp_tag"
     git checkout "$px4_version"
     # restore airframes patch
-    patch -R $ROOT_DIR/PX4-Autopilot/ROMFS/px4fmu_common/init.d/airframes/CMakeLists.txt < $ROOT_DIR/airframes.patch
+    sed -i "/### BEGIN EOLAB DRONES ###/,/### END EOLAB DRONES ###/d" $ROOT_DIR/PX4-Autopilot/ROMFS/px4fmu_common/init.d/airframes/CMakeLists.txt
 
     local output="${ROOT_DIR}/${drone_name}_v${drone_fw_version}.px4"
     cp $ROOT_DIR/PX4-Autopilot/build/$target/$target.px4 $output
