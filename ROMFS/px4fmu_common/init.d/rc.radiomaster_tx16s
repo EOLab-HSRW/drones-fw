@@ -36,5 +36,7 @@ param set-default RC6_MAX 2000
 param set-default RC6_MIN 1000
 param set-default RC6_TRIM 1500
 
-# flight modes setup, as described in https://drones.eolab.de/transmitter.html#flight-modes
-param set-default COM_FLTMODE1 2 # Position Mode
+# flight modes setup, as described in https://drones.eolab.de/common-operational-manual/transmitter-settings.html
+param set-default COM_FLTMODE1 9 # Position Slow
+param set-default COM_FLTMODE2 2 # Position
+param set-default COM_FLTMODE3 1 # Manual

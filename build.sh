@@ -107,28 +107,28 @@ build_drone() {
     # see https://docs.px4.io/main/en/dev_setup/building_px4.html#px4-make-build-targets
     case "$drone_name" in
         platypus)
-            PX4_VERSION="v1.15.0"
+            PX4_VERSION="v1.15.4"
             DRONE_FW_VERSION="0.0.4"
 
             VENDOR="px4"
             MODEL="fmu-v3"
             ;;
         sar)
-            PX4_VERSION="v1.15.0"
+            PX4_VERSION="v1.15.4"
             DRONE_FW_VERSION="0.0.1"
 
             VENDOR="px4"
             MODEL="fmu-v6x"
             ;;
         phoenix)
-            PX4_VERSION="v1.15.0"
+            PX4_VERSION="v1.15.4"
             DRONE_FW_VERSION="0.0.1"
 
             VENDOR="px4"
             MODEL="fmu-v3"
             ;;
         condor)
-            PX4_VERSION="v1.15.0"
+            PX4_VERSION="v1.15.4"
             DRONE_FW_VERSION="0.0.1"
 
             VENDOR="px4"
