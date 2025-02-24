@@ -108,7 +108,7 @@ build_drone() {
     case "$drone_name" in
         platypus)
             PX4_VERSION="v1.15.4"
-            DRONE_FW_VERSION="0.0.4"
+            DRONE_FW_VERSION="0.0.1"
 
             VENDOR="px4"
             MODEL="fmu-v3"
