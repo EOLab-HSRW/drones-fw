@@ -129,7 +129,7 @@ build_drone() {
             ;;
         condor)
             PX4_VERSION="v1.15.4"
-            DRONE_FW_VERSION="0.0.1"
+            DRONE_FW_VERSION="0.0.3"
 
             VENDOR="px4"
             MODEL="fmu-v3"
