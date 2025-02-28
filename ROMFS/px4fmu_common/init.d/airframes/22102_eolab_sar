@@ -35,9 +35,9 @@ param set-default CA_ROTOR3_PY 0.084853
 param set-default CA_ROTOR3_KM -0.05
 
 # mapping pins to motors
-param set-default PWM_AUX_FUNC1 101
+param set-default PWM_AUX_FUNC1 103
 param set-default PWM_AUX_FUNC2 102
-param set-default PWM_AUX_FUNC3 103
+param set-default PWM_AUX_FUNC3 101
 param set-default PWM_AUX_FUNC4 104
 
 # -3: DShot600
