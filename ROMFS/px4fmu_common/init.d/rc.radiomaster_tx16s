@@ -9,7 +9,8 @@ param set-default MAV_0_CONFIG 101 # https://docs.px4.io/main/en/advanced_config
 param set-default MAV_1_CONFIG 0
 
 # select CRSF as RC protocol
-param set-default RC_INPUT_PROTO 6
+param set-default RC_INPUT_PROTO 6 # TELEM2 as RC Input
+param set-default RC_CRSF_TEL_EN 1 # Enable CRSF Telemetry
 # enable CRSF input in TELEM2
 param set-default RC_CRSF_PRT_CFG 102 # https://docs.px4.io/main/en/advanced_config/parameter_reference.html#RC_CRSF_PRT_CFG
 
