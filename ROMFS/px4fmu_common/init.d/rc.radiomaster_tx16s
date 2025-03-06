@@ -28,6 +28,7 @@ param set-default RC_MAP_FLTMODE 6
 # TODO:
 # MAKE the KILL SWITCH UNIQUE (if the position of the switch return it should remains off)
 param set-default RC_MAP_KILL_SW 8
+param set-default MAN_ARM_GESTURE 1
 
 # we are using all the RCX channel with the default values:
 # MAX: 2000
