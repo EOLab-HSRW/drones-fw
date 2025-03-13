@@ -42,3 +42,12 @@ param set-default PWM_AUX_FUNC4 104
 
 # -3: DShot600
 param set-default PWM_AUX_TIM0 -3
+
+#####################################
+# FMU placement and orientation
+#####################################
+
+param set-default EKF2_IMU_POS_X 0
+param set-default EKF2_IMU_POS_Y 0
+param set-default EKF2_IMU_POS_Z 0
+param set-default SENS_BOARD_ROT 8 # ROLL 180 deg
