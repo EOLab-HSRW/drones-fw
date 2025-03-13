@@ -18,7 +18,7 @@ param set-default RC_CRSF_PRT_CFG 102 # https://docs.px4.io/main/en/advanced_con
 # Parameters Radiomaster TX16S
 ################################
 
-# channel mapping according to our conventions (Mode 2): https://drones.eolab.de/transmitter.html
+# channel mapping according to our conventions (Mode 2): https://drones.eolab.de/development/radio-setup.html#channels-mapping
 param set-default RC_MAP_ROLL 1
 param set-default RC_MAP_PITCH 2
 param set-default RC_MAP_THROTTLE 3
@@ -38,7 +38,7 @@ param set-default RC6_MAX 2000
 param set-default RC6_MIN 1000
 param set-default RC6_TRIM 1500
 
-# flight modes setup, as described in https://drones.eolab.de/common-operational-manual/transmitter-settings.html
+# flight modes setup, as described in https://drones.eolab.de/development/radio-setup.html#flight-modes-mapping
 param set-default COM_FLTMODE1 9 # Position Slow
 param set-default COM_FLTMODE2 2 # Position
 param set-default COM_FLTMODE3 1 # Manual
