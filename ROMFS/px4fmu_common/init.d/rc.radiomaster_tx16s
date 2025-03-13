@@ -4,12 +4,12 @@
 ################################################
 
 # enable MAVLink in TELEM1
-param set-default MAV_0_CONFIG 101 # https://docs.px4.io/main/en/advanced_config/parameter_reference.html#MAV_0_CONFIG
+param set-default MAV_0_CONFIG 101
 # disable MAVLink in TELEM2 to prevent problems with CRSF (see param RC_CRSF_PRT_CFG)
 param set-default MAV_1_CONFIG 0
 
 # select CRSF as RC protocol
-param set-default RC_INPUT_PROTO 6 # TELEM2 as RC Input
+# param set-default RC_INPUT_PROTO 6 # TELEM2 as RC Input
 param set-default RC_CRSF_TEL_EN 1 # Enable CRSF Telemetry
 # enable CRSF input in TELEM2
 param set-default RC_CRSF_PRT_CFG 102 # https://docs.px4.io/main/en/advanced_config/parameter_reference.html#RC_CRSF_PRT_CFG
@@ -41,4 +41,3 @@ param set-default RC6_TRIM 1500
 # flight modes setup, as described in https://drones.eolab.de/development/radio-setup.html#flight-modes-mapping
 param set-default COM_FLTMODE1 9 # Position Slow
 param set-default COM_FLTMODE2 2 # Position
-param set-default COM_FLTMODE3 1 # Manual
