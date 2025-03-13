@@ -59,7 +59,7 @@ build_firmware() {
     cp -r ROMFS/* $ROOT_DIR/PX4-Autopilot/ROMFS/
 
     # Add the radio parameters to the firmware
-    sed -i '/rc.mc_defaults/a\rc.radiomaster_tx16s' $ROOT_DIR/PX4-Autopilot/ROMFS/px4fmu_common/init.d/CMakeLists.txt
+    sed -i '/rc.sensors/a\rc.radiomaster_tx16s' $ROOT_DIR/PX4-Autopilot/ROMFS/px4fmu_common/init.d/CMakeLists.txt
 
     # Patch the airframes file
     # [IMPORTANT] DO NOT CHANGE THE IDENTATION
