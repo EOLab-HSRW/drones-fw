@@ -60,6 +60,8 @@ build_firmware() {
 
     # Add the radio parameters to the firmware
     sed -i '/rc.sensors/a\rc.radiomaster_tx16s' $ROOT_DIR/PX4-Autopilot/ROMFS/px4fmu_common/init.d/CMakeLists.txt
+    # Add radio parameters to SIMULATION
+    sed -i '/rcS/a\rc.radiomaster_tx16s' $ROOT_DIR/PX4-Autopilot/ROMFS/px4fmu_common/init.d-posix/CMakeLists.txt
 
     # Patch the airframes file
     # [IMPORTANT] DO NOT CHANGE THE IDENTATION
@@ -67,6 +69,13 @@ build_firmware() {
 sed -i "/Quadrotor x/{
 r airframes.eolab
 }" $ROOT_DIR/PX4-Autopilot/ROMFS/px4fmu_common/init.d/airframes/CMakeLists.txt
+    # END
+
+    # Add airframes to sim
+    # START
+sed -i "/px4_add_romfs_files/{
+r airframes.eolab
+}" $ROOT_DIR/PX4-Autopilot/ROMFS/px4fmu_common/init.d-posix/airframes/CMakeLists.txt
     # END
 
     cd $ROOT_DIR/PX4-Autopilot
@@ -81,7 +90,9 @@ r airframes.eolab
     git checkout "$px4_version"
     # restore airframes patch
     sed -i "/### BEGIN EOLAB DRONES ###/,/### END EOLAB DRONES ###/d" $ROOT_DIR/PX4-Autopilot/ROMFS/px4fmu_common/init.d/airframes/CMakeLists.txt
+    sed -i "/### BEGIN EOLAB DRONES ###/,/### END EOLAB DRONES ###/d" $ROOT_DIR/PX4-Autopilot/ROMFS/px4fmu_common/init.d-posix/airframes/CMakeLists.txt
     sed -i '/rc.radiomaster_tx16s/d' $ROOT_DIR/PX4-Autopilot/ROMFS/px4fmu_common/init.d/CMakeLists.txt
+    # sed -i '/rc.radiomaster_tx16s/d' $ROOT_DIR/PX4-Autopilot/ROMFS/px4fmu_common/init.d-posix/CMakeLists.txt
 
     local output="${ROOT_DIR}/${drone_name}_v${drone_fw_version}.px4"
     cp $ROOT_DIR/PX4-Autopilot/build/$target/$target.px4 $output

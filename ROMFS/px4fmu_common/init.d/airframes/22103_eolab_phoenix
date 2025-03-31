@@ -19,8 +19,71 @@
 . ${R}etc/init.d/rc.mc_defaults
 . ${R}etc/init.d/rc.radiomaster_tx16s # radio params
 
+SYSTEM=${SYSTEM:=real}
+
 # MAV_TYPE_HEXAROTOR 13
 param set-default MAV_TYPE 13
+
+if [ "$SYSTEM" = "real" ]; then
+    echo "Running real system."
+
+    param set-default PWM_MAIN_FUNC1 101
+    param set-default PWM_MAIN_FUNC2 102
+    param set-default PWM_MAIN_FUNC3 103
+    param set-default PWM_MAIN_FUNC4 104
+    param set-default PWM_MAIN_FUNC5 105
+    param set-default PWM_MAIN_FUNC6 106
+
+    #####################################
+    # ESC Calibration
+    #####################################
+
+    param set-default PWM_MAIN_MIN1 1150
+    param set-default PWM_MAIN_MAX1 1900
+
+    param set-default PWM_MAIN_MIN2 1150
+    param set-default PWM_MAIN_MAX2 1900
+
+    param set-default PWM_MAIN_MIN3 1150
+    param set-default PWM_MAIN_MAX3 1900
+
+    param set-default PWM_MAIN_MIN4 1150
+    param set-default PWM_MAIN_MAX4 1900
+
+    param set-default PWM_MAIN_MIN5 1150
+    param set-default PWM_MAIN_MAX5 1900
+
+    param set-default PWM_MAIN_MIN6 1150
+    param set-default PWM_MAIN_MAX6 1900
+
+    #####################################
+    ## Sensors
+    #####################################
+
+    # Range finder sensor
+    # (phoenix) is equiped with the SF11/C see: https://lightwarelidar.com/shop/sf11-c-100-m/
+    # to this parameter to work make sure the I2C protocol is correlty set, see: https://docs.px4.io/main/en/sensor/sfxx_lidar.html#i2c-setup
+    param set-default SENS_EN_SF1XX 3
+
+elif [ "$SYSTEM" = "gz" ]; then
+    param set-default SIM_GZ_EN 1
+
+    param set-default SIM_GZ_EC_FUNC1 101
+    param set-default SIM_GZ_EC_FUNC2 102
+    param set-default SIM_GZ_EC_FUNC3 103
+    param set-default SIM_GZ_EC_FUNC4 104
+
+    param set-default SIM_GZ_EC_MIN1 150
+    param set-default SIM_GZ_EC_MIN2 150
+    param set-default SIM_GZ_EC_MIN3 150
+    param set-default SIM_GZ_EC_MIN4 150
+
+    param set-default SIM_GZ_EC_MAX1 1000
+    param set-default SIM_GZ_EC_MAX2 1000
+    param set-default SIM_GZ_EC_MAX3 1000
+    param set-default SIM_GZ_EC_MAX4 1000
+fi
+
 
 #####################################
 # FMU placement and orientation
@@ -54,43 +117,9 @@ param set-default CA_ROTOR5_PX -0.51
 param set-default CA_ROTOR5_PY -0.29
 param set-default CA_ROTOR5_KM -0.05
 
-param set-default PWM_MAIN_FUNC1 101
-param set-default PWM_MAIN_FUNC2 102
-param set-default PWM_MAIN_FUNC3 103
-param set-default PWM_MAIN_FUNC4 104
-param set-default PWM_MAIN_FUNC5 105
-param set-default PWM_MAIN_FUNC6 106
 
-#####################################
-# ESC Calibration
-#####################################
 
-param set-default PWM_MAIN_MIN1 1150
-param set-default PWM_MAIN_MAX1 1900
 
-param set-default PWM_MAIN_MIN2 1150
-param set-default PWM_MAIN_MAX2 1900
-
-param set-default PWM_MAIN_MIN3 1150
-param set-default PWM_MAIN_MAX3 1900
-
-param set-default PWM_MAIN_MIN4 1150
-param set-default PWM_MAIN_MAX4 1900
-
-param set-default PWM_MAIN_MIN5 1150
-param set-default PWM_MAIN_MAX5 1900
-
-param set-default PWM_MAIN_MIN6 1150
-param set-default PWM_MAIN_MAX6 1900
-
-#####################################
-## Sensors
-#####################################
-
-# Range finder sensor
-# (phoenix) is equiped with the SF11/C see: https://lightwarelidar.com/shop/sf11-c-100-m/
-# to this parameter to work make sure the I2C protocol is correlty set, see: https://docs.px4.io/main/en/sensor/sfxx_lidar.html#i2c-setup
-param set-default SENS_EN_SF1XX 3
 
 # note: the GPS2 physical port is map to TELEM4 internally, see: https://docs.px4.io/v1.11/en/flight_controller/pixhawk-2.html#serial_ports
 param set-default GPS_2_CONFIG 202
