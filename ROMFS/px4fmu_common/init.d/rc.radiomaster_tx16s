@@ -3,8 +3,18 @@
 # Radiomaster TX16S Mark II (ExpressLRS Radio)
 ################################################
 
+################################
+# Mavlink Common
+################################
+
+# TELEM1 is used for telemetry radio link
 # enable MAVLink in TELEM1
 param set-default MAV_0_CONFIG 101
+param set-default MAV_0_MODE 0
+param set-default MAV_0_RATE 1200
+param set-default MAV_0_FORWARD 1
+param set-default SER_TEL1_BAUD 57600
+
 # disable MAVLink in TELEM2 to prevent problems with CRSF (see param RC_CRSF_PRT_CFG)
 param set-default MAV_1_CONFIG 0
 
@@ -41,3 +51,4 @@ param set-default RC6_TRIM 1500
 # flight modes setup, as described in https://drones.eolab.de/development/radio-setup.html#flight-modes-mapping
 param set-default COM_FLTMODE1 9 # Position Slow
 param set-default COM_FLTMODE2 2 # Position
+
