@@ -57,6 +57,8 @@ build_firmware() {
 
     cp -r boards/* $ROOT_DIR/PX4-Autopilot/boards/
     cp -r ROMFS/* $ROOT_DIR/PX4-Autopilot/ROMFS/
+    # add same frame files into the posix platform
+    cp -r ROMFS/px4fmu_common/init.d/airframes/* $ROOT_DIR/PX4-Autopilot/ROMFS/px4fmu_common/init.d-posix/airframes/
 
     # Add the radio parameters to the firmware
     sed -i '/rc.sensors/a\rc.radiomaster_tx16s' $ROOT_DIR/PX4-Autopilot/ROMFS/px4fmu_common/init.d/CMakeLists.txt
@@ -92,7 +94,7 @@ r airframes.eolab
     sed -i "/### BEGIN EOLAB DRONES ###/,/### END EOLAB DRONES ###/d" $ROOT_DIR/PX4-Autopilot/ROMFS/px4fmu_common/init.d/airframes/CMakeLists.txt
     sed -i "/### BEGIN EOLAB DRONES ###/,/### END EOLAB DRONES ###/d" $ROOT_DIR/PX4-Autopilot/ROMFS/px4fmu_common/init.d-posix/airframes/CMakeLists.txt
     sed -i '/rc.radiomaster_tx16s/d' $ROOT_DIR/PX4-Autopilot/ROMFS/px4fmu_common/init.d/CMakeLists.txt
-    # sed -i '/rc.radiomaster_tx16s/d' $ROOT_DIR/PX4-Autopilot/ROMFS/px4fmu_common/init.d-posix/CMakeLists.txt
+    sed -i '/rc.radiomaster_tx16s/d' $ROOT_DIR/PX4-Autopilot/ROMFS/px4fmu_common/init.d-posix/CMakeLists.txt
 
     local output="${ROOT_DIR}/${drone_name}_v${drone_fw_version}.px4"
     cp $ROOT_DIR/PX4-Autopilot/build/$target/$target.px4 $output
