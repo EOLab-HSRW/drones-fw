@@ -3,26 +3,40 @@
 set -e
 
 NAME_OPTIONS=("platypus" "sar" "phoenix" "condor" "protoflyer" "all")
+COMMAND_OPTIONS=("build" "sitl")
 ROOT_DIR=$PWD
 
 usage() {
-  echo "Usage: $0 DRONE_NAME"
-  echo ""
-  echo "Available drone names:"
-
-  for option in "${NAME_OPTIONS[@]}"; do
-      echo "    - ${option}"
-  done
-  exit 1
+    echo "Usage: $0 <COMMAND> <DRONE_NAME>"
+    echo ""
+    echo "Available commands:"
+    for cmd in "${COMMAND_OPTIONS[@]}"; do
+        echo "    - ${cmd}"
+    done
+    echo ""
+    echo "Available drone names:"
+    for drone in "${NAME_OPTIONS[@]}"; do
+        echo "    - ${drone}"
+    done
+    exit 1
 }
 
-if [ -z "$1" ]; then
-  echo "Error: No argument provided."
+if [ -z "$1" ] || [ -z "$2" ]; then
+  echo "Error: Missing arguments."
   usage
 fi
 
-if [[ ! " ${NAME_OPTIONS[@]} " =~ " $1 " ]]; then
-  echo "Error: Invalid drone name '$1'"
+COMMAND=$1
+DRONE_NAME=$2
+
+if [[ ! " ${COMMAND_OPTIONS[@]} " =~ " ${COMMAND} " ]]; then
+  echo "Error: Invalid command '${COMMAND}'"
+  usage
+fi
+
+if [[ ! " ${NAME_OPTIONS[@]} " =~ " ${DRONE_NAME} " ]]; then
+
+  echo "Error: Invalid drone name '${DRONE_NAME}'"
   usage
 fi
 
@@ -169,13 +183,34 @@ build_drone() {
     build_firmware "$PX4_VERSION" "$DRONE_FW_VERSION" "$VENDOR" "$MODEL" "$drone_name"
 }
 
-if [ "$1" == "all" ]; then
-    echo "build all firmwares"
-    for drone in "${NAME_OPTIONS[@]}"; do
-        if [ "$drone" != "all" ]; then
-            build_drone "$drone"
-        fi
-    done
-else
-    build_drone "$1"
-fi
+sitl_drone() {
+  local drone_name=$1
+
+  echo "Running SITL simulation for ${drone_name}..."
+  echo "test....."
+  # Add your actual SITL commands here
+  # cd PX4-Autopilot
+  # make px4_sitl_default jmavsim
+}
+
+case "$COMMAND" in
+  build)
+    if [ "$DRONE_NAME" == "all" ]; then
+        echo "Building all firmwares..."
+        for drone in "${NAME_OPTIONS[@]}"; do
+            if [ "$drone" != "all" ]; then
+                build_drone "$drone"
+            fi
+        done
+    else
+        build_drone "$DRONE_NAME"
+    fi
+    ;;
+  sitl)
+    sitl_drone "$DRONE_NAME"
+    ;;
+  *)
+    echo "Unknown command: $COMMAND"
+    usage
+    ;;
+esac
