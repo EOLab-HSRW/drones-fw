@@ -3,7 +3,7 @@
 set -e
 
 NAME_OPTIONS=("platypus" "sar" "phoenix" "condor" "protoflyer" "all")
-COMMAND_OPTIONS=("build" "sitl")
+COMMAND_OPTIONS=("firmware" "sitl")
 ROOT_DIR=$PWD
 
 usage() {
@@ -64,7 +64,14 @@ build_firmware() {
     # working out the tags for the custom firmware version format
     git tag -f -a "$temp_tag" -m "${temp_tag}"
 
-    bash ./Tools/setup/ubuntu.sh --no-sim-tools
+    if [ "$model" == "sitl" ]; then
+        echo "Installing dependencies for simulation"
+        bash ./Tools/setup/ubuntu.sh
+    else
+        echo "Installing dependencies (no-sim-tools)"
+        bash ./Tools/setup/ubuntu.sh --no-sim-tools
+    fi
+
     sudo apt -y install gcc-arm-none-eabi # check https://github.com/PX4/PX4-Autopilot/issues/15719#issuecomment-1582186108
 
     cd $ROOT_DIR
@@ -73,10 +80,12 @@ build_firmware() {
     cp -r ROMFS/* $ROOT_DIR/PX4-Autopilot/ROMFS/
     # add same frame files into the posix platform
     cp -r ROMFS/px4fmu_common/init.d/airframes/* $ROOT_DIR/PX4-Autopilot/ROMFS/px4fmu_common/init.d-posix/airframes/
+    # copy rc settings into STIL firmware
+    cp ROMFS/px4fmu_common/init.d/rc.radiomaster_tx16s $ROOT_DIR/PX4-Autopilot/ROMFS/px4fmu_common/init.d-posix/rc.radiomaster_tx16s
 
     # Add the radio parameters to the firmware
     sed -i '/rc.sensors/a\rc.radiomaster_tx16s' $ROOT_DIR/PX4-Autopilot/ROMFS/px4fmu_common/init.d/CMakeLists.txt
-    # Add radio parameters to SIMULATION
+    # Add radio parameters to SITL firmware
     sed -i '/rcS/a\rc.radiomaster_tx16s' $ROOT_DIR/PX4-Autopilot/ROMFS/px4fmu_common/init.d-posix/CMakeLists.txt
 
     # Patch the airframes file
@@ -110,24 +119,27 @@ r airframes.eolab
     sed -i '/rc.radiomaster_tx16s/d' $ROOT_DIR/PX4-Autopilot/ROMFS/px4fmu_common/init.d/CMakeLists.txt
     sed -i '/rc.radiomaster_tx16s/d' $ROOT_DIR/PX4-Autopilot/ROMFS/px4fmu_common/init.d-posix/CMakeLists.txt
 
-    local output="${ROOT_DIR}/${drone_name}_v${drone_fw_version}.px4"
-    cp $ROOT_DIR/PX4-Autopilot/build/$target/$target.px4 $output
+    if [ "$model" == "sitl" ]; then
+        echo "SITL firmware done"
+    else
+        local output="${ROOT_DIR}/${drone_name}_v${drone_fw_version}.px4"
+        cp $ROOT_DIR/PX4-Autopilot/build/$target/$target.px4 $output
 
-    echo ""
-    echo "==============================================="
-    echo "The firmware file has been created in ${output}"
-    echo "==============================================="
+        echo ""
+        echo "==============================================="
+        echo "The firmware file has been created in ${output}"
+        echo "==============================================="
+    fi
 
 }
 
 build_drone() {
     local drone_name=$1
-
-    drone_name=$1
+    local build_type=$2
 
     # To add a new drone the following variables are mandatory:
     # PX4_VERSION: the version of the PX4 firmware to build
-    # DRONE_FW_VERSION: Drone spe
+    # DRONE_FW_VERSION: Drone spec
     #
     # VENDOR: The manufacturer of the board. The vendor name for Pixhawk series boards is "px4".
     # MODEL: The board model.
@@ -175,42 +187,30 @@ build_drone() {
         #     MODEL="fmu-v5"
         #     ;;
         *)
+            # this condition should never occur
+            # due to checks of valid names
+            # but it is here just in case.
             echo "Error: Unknown drone name '$1'."
             usage
             ;;
     esac
 
-    build_firmware "$PX4_VERSION" "$DRONE_FW_VERSION" "$VENDOR" "$MODEL" "$drone_name"
-}
-
-sitl_drone() {
-  local drone_name=$1
-
-  echo "Running SITL simulation for ${drone_name}..."
-  echo "test....."
-  # Add your actual SITL commands here
-  # cd PX4-Autopilot
-  # make px4_sitl_default jmavsim
-}
-
-case "$COMMAND" in
-  build)
-    if [ "$DRONE_NAME" == "all" ]; then
-        echo "Building all firmwares..."
-        for drone in "${NAME_OPTIONS[@]}"; do
-            if [ "$drone" != "all" ]; then
-                build_drone "$drone"
-            fi
-        done
+    if [ "$build_type" == "sitl" ]; then
+        echo "Building SITL firmware for $drone_name"
+        build_firmware "$PX4_VERSION" "$DRONE_FW_VERSION" "$VENDOR" "sitl" "$drone_name"
     else
-        build_drone "$DRONE_NAME"
+        echo "Building firmware for hardware: $drone_name"
+        build_firmware "$PX4_VERSION" "$DRONE_FW_VERSION" "$VENDOR" "$MODEL" "$drone_name"
     fi
-    ;;
-  sitl)
-    sitl_drone "$DRONE_NAME"
-    ;;
-  *)
-    echo "Unknown command: $COMMAND"
-    usage
-    ;;
-esac
+}
+
+if [ "$DRONE_NAME" == "all" ]; then
+    echo "Building all firmwares for command: $COMMAND"
+    for drone in "${NAME_OPTIONS[@]}"; do
+        if [ "$drone" != "all" ]; then
+            build_drone "$drone" "$COMMAND"
+        fi
+    done
+else
+    build_drone "$DRONE_NAME" "$COMMAND"
+fi
