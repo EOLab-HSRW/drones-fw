@@ -49,6 +49,11 @@ param set-default RC6_MIN 1000
 param set-default RC6_TRIM 1500
 
 # flight modes setup, as described in https://drones.eolab.de/development/radio-setup.html#flight-modes-mapping
-param set-default COM_FLTMODE1 9 # Position Slow
-param set-default COM_FLTMODE2 2 # Position
+param set-default COM_FLTMODE1 2 # Position
+param set-default COM_FLTMODE2 4 # Hold
 
+# Harley note:
+# For some unkown reason the RC_CHAN_CNT default value 0
+# make the flight controller detect "no manual control input"
+# should I open an issue in PX4
+param set-default RC_CHAN_CNT 16
