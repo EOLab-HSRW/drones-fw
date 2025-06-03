@@ -37,7 +37,8 @@ def main():
 
     args = parser.parse_args()
 
-    cmd_register[args.command]().execute(args)
+    with cmd_register[args.command]() as worker:
+        worker.execute(args)
 
     return 0
 
