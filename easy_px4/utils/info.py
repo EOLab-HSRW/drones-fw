@@ -181,11 +181,3 @@ def load_info(path: Path) -> Info:
     Load info.toml file from path.
     """
     return InfoManager(path).get_info()
-
-
-def parse_directory(directory: str):
-    path = Path(directory)
-    if not path.is_dir():
-        raise ArgumentTypeError(f"{path} is not a valid directory.")
-    return path
-
