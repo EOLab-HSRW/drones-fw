@@ -5,19 +5,17 @@
 ## Build Firmware Locally
 
 ```console
-bash build.sh <DRONE_NAME>
+eolab_drone build --type [sitl|firmware] --drone [DRONE_NAME]
 ```
 
 for example to build the firmware of `platypus`:
 
 ```console
-bash build.sh platypus
+eolab_drone build --type firmware --drone platypus
 ```
 
-## The Little Spec
+for building the simulation firmware:
 
-Specting a directory with the following files (name sensitive)
-- `info.toml`
-- `params.airframe`
-- `board.modules`
-- `sitl.modules`
+```console
+eolab_drone build --type sitl --drone platypus
+```
