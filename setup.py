@@ -23,7 +23,7 @@ setup(
     packages=find_packages(),
     python_requires='>=3.10',
     install_requires=[
-        "easy_px4 @ https://github.com/EOLab-HSRW/easy-px4.git@main#egg=easy_px4"
+        "easy_px4 @ git+https://github.com/EOLab-HSRW/easy-px4.git@main#egg=easy_px4"
     ],
     entry_points={
         "console_scripts": [
