@@ -19,3 +19,17 @@ def get_frame_id(drone_name: str) -> str:
         return str(CATALOG[normalized_name]["frame_id"])
     else:
         raise Exception("not a drone name in the catalog")
+
+
+from .utils.info import load_info
+from .utils.directory import load_directory
+from types import SimpleNamespace
+
+utils = SimpleNamespace(
+    load_directory=load_directory,
+    load_info=load_info
+)
+
+__all__ = [
+    "utils"
+]
