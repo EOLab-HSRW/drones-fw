@@ -15,7 +15,7 @@
 #
 
 . ${R}etc/init.d/rc.mc_defaults
-. ${R}etc/init.d/rc.radiomaster_tx16s # radio params
+. ${R}etc/init.d/radiomaster_tx16s # radio params
 
 # Square quadrotor X PX4 numbering
 param set-default CA_ROTOR_COUNT 4
@@ -51,3 +51,10 @@ param set-default EKF2_IMU_POS_X 0
 param set-default EKF2_IMU_POS_Y 0
 param set-default EKF2_IMU_POS_Z 0
 param set-default SENS_BOARD_ROT 8 # ROLL 180 deg
+
+# distance sensor
+param set-default SENS_EN_VL53L1X 1
+
+param set-default SENS_EN_PMW3901 1 # enable sensor
+param set-default SENS_TFLOW_CFG 103 # attach sensor to TELEM3
+paran set-default EKF2_OF_CTRL 1

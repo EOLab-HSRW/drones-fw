@@ -13,3 +13,11 @@ for example to build the firmware of `platypus`:
 ```console
 bash build.sh platypus
 ```
+
+## The Little Spec
+
+Specting a directory with the following files (name sensitive)
+- `info.toml`
+- `params.airframe`
+- `board.modules`
+- `sitl.modules`

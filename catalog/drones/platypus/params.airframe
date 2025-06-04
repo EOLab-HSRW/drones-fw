@@ -19,7 +19,7 @@
 #
 
 . ${R}etc/init.d/rc.mc_defaults
-. ${R}etc/init.d/rc.radiomaster_tx16s # radio params
+. ${R}etc/init.d/radiomaster_tx16s # radio params
 
 param set-default MAV_TYPE 14
 
@@ -112,6 +112,7 @@ param set-default PWM_MAIN_MAX8 1900
 
 # Range finder sensor
 param set-default SENS_EN_TRANGER 3 # TeraRanger Evo 60m
+param set-default SER_TEL1_BAUD 57600
 
 #####################################
 ## Battery
@@ -120,7 +121,9 @@ param set-default BAT1_SOURCE 0
 param set-default BAT1_N_CELLS 6
 param set-default BAT1_V_CHARGED 4.02
 param set-default BAT1_V_EMPTY 3.7
-param set-default BAT1_V_DIV 12.12796783
-param set-default BAT1_CAPACITY 5000
+param set-default BAT1_V_DIV 10.14954090
+# param set-default BAT1_A_PER_V 27.16064262
+param set-default BAT1_A_PER_V 23.39113617
+param set-default BAT1_CAPACITY 11000
 # TODO: 
 # - BAT1_R_INTERNAL
