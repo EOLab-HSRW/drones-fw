@@ -2,29 +2,42 @@ from types import NoneType
 from typing import Union
 from pathlib import Path
 import easy_px4
-from eolab_drones.paths import DRONES_DIR
-
+from eolab_drones.paths import DRONES_DIR, COMPONENTS_DIR
 
 def get_catalog() -> dict[str, dict]:
     """
-    return dictionary with drone information
+    Returns dictionary with EOLab's drones and components.
     """
 
-    catalog = {}
+    drones = {}
+
+    components = [f.name for f in COMPONENTS_DIR.iterdir() if f.is_file()]
 
     for info_file in DRONES_DIR.rglob("info.toml"):
         info_dict = easy_px4.load_info(info_file)
         name = info_dict.pop("name")  # remove and get the 'name' key
-        catalog[name] = info_dict
+        drones[name] = info_dict
 
-    return catalog
+    return {"drones": drones, "components": components}
+
+def get_drones() -> dict[str, dict]:
+    """
+    Returns a dictionary with EOLab's drone catalog.
+    """
+    return get_catalog().get("drones")
+
+def get_components() -> list:
+    """
+    Returns list of names of EOLab's components.
+    """
+    return get_catalog().get("components")
 
 def __check_drone(drone: str) -> Union[dict, NoneType]:
     """
     Checks if the given drone is in the catalog.
     """
 
-    return get_catalog().get(drone, None)
+    return get_drones().get(drone, None)
 
 
 def get_id(drone: str) -> Union[int, NoneType]:
