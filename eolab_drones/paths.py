@@ -7,6 +7,6 @@ from pathlib import Path
 
 # TODO fix data files import for editable packages
 # this is mainly for development
-CATALOG_DIR = Path(files(__package__)) / ".." / "catalog"
+CATALOG_DIR = Path(files(__package__)) / "catalog"
 DRONES_DIR = CATALOG_DIR / "drones"
 COMPONENTS_DIR = CATALOG_DIR / "components"
