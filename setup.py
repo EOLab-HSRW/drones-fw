@@ -26,7 +26,7 @@ setup(
         "easy_px4 @ git+https://github.com/EOLab-HSRW/easy-px4.git@main"
     ],
     include_package_data=True,
-    package_data={__package__: ["catalog/**/*"]},  # include all files in catalog/
+    # package_data={__package__: ["catalog/**/*"]},  # include all files in catalog/
     entry_points={
         "console_scripts": [
             f"{__package__} = {__package__}.main:main",
