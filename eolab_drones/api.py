@@ -60,7 +60,7 @@ def get_build_dir(drone: str, build_type: str = "sitl") -> Union[Path, NoneType]
     general_build = easy_px4.get_build_dir()
 
     if build_type == "sitl":
-         drone_build = general_build / f"{drone_info['vendor']}_sitl_{drone}"
+         drone_build = general_build / f"px4_sitl_{drone}"
     else:
         drone_build = general_build / f"{drone_info['vendor']}_{drone_info['model']}_{drone}"
 
