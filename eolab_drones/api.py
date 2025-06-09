@@ -53,6 +53,20 @@ def get_id(drone: str) -> Union[int, NoneType]:
     else:
         return None
 
+def get_drone_path(drone: str) -> str:
+    """
+    Returns dictionary containing drone information.
+    """
+    __check_drone(drone)
+
+    return str((DRONES_DIR / drone).resolve())
+
+def get_components_path() -> str:
+    """
+    Returns path to components files.
+    """
+    return str(COMPONENTS_DIR.resolve())
+
 def get_build_dir(drone: str, build_type: str = "sitl") -> Union[Path, NoneType]:
 
     drone_info = __check_drone(drone)
