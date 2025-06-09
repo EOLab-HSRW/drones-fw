@@ -1,5 +1,6 @@
 import subprocess
 from argparse import Namespace, ArgumentParser
+import sys
 from easy_px4.backend import Command, valid_dir_path, run_command
 from ..api import get_drones, get_drone_path, get_components_path
 
@@ -48,11 +49,11 @@ class BuildAllCommand(Command):
             for line in process.stdout:
                 print(line, end='')  # Avoid double newline
 
-        # build_drone = run_command(build_cmd)
-        # print(f"\nProcess finished with return code: {process.returncode}")
+            return_code = process.wait()
 
-        # if build_drone["returncode"] != 0:
-        #     self.logger.error(f"Failed to build firmware. {build_drone['stderr']}, {build_drone['stdout']}")
+            if return_code != 0:
+                sys.exit(return_code)
+
 
         return None
 
