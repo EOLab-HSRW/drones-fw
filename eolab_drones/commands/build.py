@@ -61,7 +61,7 @@ class BuildDroneCommand(Command):
             print(line, end='')  # Avoid double newline
 
         # build_drone = run_command(build_cmd)
-        print(f"\nProcess finished with return code: {return_code}")
+        # print(f"\nProcess finished with return code: {process.returncode}")
 
         # if build_drone["returncode"] != 0:
         #     self.logger.error(f"Failed to build firmware. {build_drone['stderr']}, {build_drone['stdout']}")
