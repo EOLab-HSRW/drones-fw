@@ -3,11 +3,12 @@ import argparse
 
 from easy_px4.backend import Command
 from .commands.build import BuildDroneCommand
+from .commands.build_all import BuildAllCommand
 
 # available command registration
 COMMAND_REGISTRY: list[type[Command]] = [
-    BuildDroneCommand
-
+    BuildDroneCommand,
+    BuildAllCommand,
 ]
 
 def main():
@@ -15,7 +16,7 @@ def main():
     parser = argparse.ArgumentParser(
         prog=__package__,
 
-        description="A simple tool to help building custom PX4-firmwares"
+        description="A simple tool to help building EOLab drones firmwares"
     )
 
     subparsers = parser.add_subparsers(dest="command", required=True, help="Available commands")
