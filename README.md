@@ -2,20 +2,26 @@
 
 ![Build Firmwares](https://github.com/EOLab-HSRW/drones-fw/actions/workflows/build.yml/badge.svg)
 
+## Install
+
+```console
+pip install git+https://github.com/EOLab-HSRW/drones-fw.git@main#egg=eolab_drones
+```
+
 ## Build Firmware Locally
 
 ```console
-eolab_drone build --type [sitl|firmware] --drone [DRONE_NAME]
+eolab_drones build --type [sitl|firmware] --drone [DRONE_NAME]
 ```
 
 for example to build the firmware of `platypus`:
 
 ```console
-eolab_drone build --type firmware --drone platypus
+eolab_drones build --type firmware --drone platypus
 ```
 
 for building the simulation firmware:
 
 ```console
-eolab_drone build --type sitl --drone platypus
+eolab_drones build --type sitl --drone platypus
 ```
