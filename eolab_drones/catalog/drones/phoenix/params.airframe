@@ -19,13 +19,12 @@
 . ${R}etc/init.d/rc.mc_defaults
 . ${R}etc/init.d/radiomaster_tx16s # radio params
 
-set SYSTEM=${SYSTEM:=real}
-
 # MAV_TYPE_HEXAROTOR 13
 param set-default MAV_TYPE 13
 param set-default MAV_SYS_ID 103
 
-if [ "$SYSTEM" = "real" ]; then
+if ! ver hwcmp "PX4_SITL"
+then
     echo "Running real system."
 
     param set-default PWM_MAIN_FUNC1 101
@@ -67,8 +66,12 @@ if [ "$SYSTEM" = "real" ]; then
     param set-default SENS_EN_SF1XX 3
 
     param set-default BAT1_V_DIV 12.05273533
+fi
 
-elif [ "$SYSTEM" = "gz" ]; then
+if ver hwcmp "PX4_SITL"
+then
+
+    echo "Running Phoenix simulation parameter"
     param set-default SIM_GZ_EN 1
 
     # harley note: check this to move to gazebo?
