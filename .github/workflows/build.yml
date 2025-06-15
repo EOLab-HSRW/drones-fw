@@ -25,6 +25,8 @@ jobs:
         run: |
           sudo apt update
           sudo apt -y install gcc-arm-none-eabi python3-pip
+      - name: Quick check
+        run: pip --version
       - name: Install Python tool (editable mode)
         run: |
           pip install -e .
