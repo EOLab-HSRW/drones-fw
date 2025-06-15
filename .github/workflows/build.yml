@@ -36,7 +36,7 @@ jobs:
           git config --global user.name "GitHub Actions Bot"
       - name: Build Firmwares
         run: |
-          eolab_drones build_all --type firmware
+          DEBUG=1 eolab_drones build_all --type firmware
       - name: Delete old release assets
         uses: mknejp/delete-release-assets@v1
         with:
