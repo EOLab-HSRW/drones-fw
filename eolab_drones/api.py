@@ -26,6 +26,12 @@ def get_drones() -> dict[str, dict]:
     """
     return get_catalog().get("drones")
 
+def get_drone(name: str) -> dict[str, dict]:
+    """
+    Returns drones specific information
+    """
+    return get_catalog().get("drones").get(name)
+
 def get_components() -> list:
     """
     Returns list of names of EOLab's components.
