@@ -70,6 +70,8 @@ class BuildDroneCommand(Command):
     def deb_packaging(self, args: Namespace):
 
         drone_info = get_drone(args.drone)
+        _, px4_minor, _ = drone_info["px4_version"].split(".")
+
         drone_name = args.drone
         custom_fw_version = drone_info["custom_fw_version"]
         branch = self.get_current_branch()
@@ -111,7 +113,20 @@ Description: SITL firmware for EOLab {drone_name}.
         opt_dir = deb_folder / "opt" / package_name
         opt_dir.mkdir(parents=True, exist_ok=True)
         subprocess.run(["cp", "-aL", str(build_dir / "bin"), str(opt_dir / "bin")], check=True)
-        subprocess.run(["cp", "-aL", str(build_dir / "rootfs"), str(opt_dir / "rootfs")], check=True)
+
+        if int(px4_minor) <= 15:
+            self.logger.debug("PX4 minor version <= 15")
+            source = build_dir / "etc"
+            dest = opt_dir / "rootfs/"
+            dest.mkdir(parents=True, exist_ok=True)
+            copy_rootfs = subprocess.run(["cp", "-aL", str(source), str(dest)], check=True)
+        elif int(px4_minor) >= 16:
+            self.logger.debug("PX4 minor version >= 16")
+            copy_rootfs = subprocess.run(["cp", "-aL", str(build_dir / "rootfs"), str(opt_dir / "rootfs")], check=True)
+
+        if copy_rootfs.returncode != 0:
+            self.logger.error(f"{copy_rootfs.stderr}. {copy_rootfs.stdout}")
+            sys.exit(1)
 
         # Remove logs to reduce package size
         for log_dir in (opt_dir / "rootfs").rglob("log"):
@@ -119,8 +134,8 @@ Description: SITL firmware for EOLab {drone_name}.
                 self.logger.debug(f"Removing: {log_dir}")
                 shutil.rmtree(log_dir)
 
-        # Copy gz_plugins only if version is > 1.16.0
-        if int(drone_info["px4_version"].split(".")[1]) > 16:
+        # Copy gz_plugins only if version is >= 1.16.0
+        if int(px4_minor) >= 16:
             self.logger.debug(f"PX4 version: {drone_info['px4_version']}. Adding gz_plugins")
             gz_plugins_dir = opt_dir / "gz_plugins"
 
