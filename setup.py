@@ -13,7 +13,7 @@ with (Path(__file__).resolve().parent / "README.md").open(encoding='utf-8') as f
 
 setup(
     name=__package__,
-    version='0.0.1',
+    version='0.0.2',
     url='https://github.com/EOLab-HSRW/drones-fw.git',
     author='Harley Lara',
     author_email='harley.lara@outlook.com',
