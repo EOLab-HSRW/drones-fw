@@ -16,7 +16,7 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
         with:
-          fetch-depth: 2  # Needed for git diff
+          fetch-depth: 0
       - name: Detect changes
         id: set-matrix
         run: |
@@ -30,6 +30,7 @@ jobs:
 
           echo "Checking changed files..."
           changed_files=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})
+          echo "$changed_files"
 
           # Check if any file in global components changed
           if echo "$changed_files" | grep -q "^eolab_drones/catalog/components/"; then
