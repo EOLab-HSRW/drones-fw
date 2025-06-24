@@ -1,0 +1,141 @@
+name: Generate Firmwares
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:  # Manual trigger
+
+jobs:
+  detect-changes:
+    runs-on: ubuntu-latest
+    outputs:
+      run_bulk: ${{ steps.set-matrix.outputs.run_bulk }}
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2  # Needed for git diff
+      - name: Detect changes
+        id: set-matrix
+        run: |
+          echo "Detecting trigger type..."
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            echo "Manual trigger: force full build"
+            echo "run_bulk=true" >> $GITHUB_OUTPUT
+            echo "matrix=[]" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          echo "Checking changed files..."
+          changed_files=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})
+
+          # Check if any file in global components changed
+          if echo "$changed_files" | grep -q "^eolab_drones/catalog/components/"; then
+            echo "Global component change detected."
+            echo "run_bulk=true" >> $GITHUB_OUTPUT
+            echo "matrix=[]" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          # Check which drone folders changed
+          changed_drones=$(echo "$changed_files" | grep '^eolab_drones/catalog/drones/' | cut -d/ -f4 | sort -u)
+          json_array=$(echo "$changed_drones" | jq -R -s -c 'split("\n") | map(select(. != ""))')
+
+          echo "run_bulk=false" >> $GITHUB_OUTPUT
+          echo "matrix=$json_array" >> $GITHUB_OUTPUT
+  bulk-build:
+    needs: detect-changes
+    if: ${{ needs.detect-changes.outputs.run_bulk == 'true' }}
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10.12'
+      - name: Install system dependencies
+        run: |
+          sudo apt update
+          sudo apt -y install gcc-arm-none-eabi python3-pip
+      - name: Downgrade pip to 22.0.2 (to match PX4)
+        run: python -m pip install pip==22.0.2
+      - name: Install Python tool (editable mode)
+        run: |
+          pip install -e .
+      - name: Configure Git committer
+        run: |
+          git config --global user.email "github-actions[bot]"
+          git config --global user.name "GitHub Actions Bot"
+      - name: Build Firmwares
+        run: |
+          DEBUG=1 eolab_drones build_all --type firmware
+      - name: Delete old release assets
+        uses: mknejp/delete-release-assets@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag: latest
+          assets: '*.px4'
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: "*.px4"
+          tag_name: latest
+          name: Latest Firmwares
+          draft: false
+          body: "This is an auto-generated set of our latest firmwares for all our drones"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  selective-build:
+    needs: detect-changes
+    if: ${{ fromJson(needs.detect-changes.outputs.matrix) != [] }}
+    runs-on: ubuntu-22.04
+    strategy:
+      matrix:
+        drone: ${{ fromJson(needs.detect-changes.outputs.matrix) }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10.12'
+      - name: Install system dependencies
+        run: |
+          sudo apt update
+          sudo apt -y install gcc-arm-none-eabi python3-pip
+      - name: Downgrade pip to 22.0.2 (to match PX4)
+        run: python -m pip install pip==22.0.2
+      - name: Install Python tool (editable mode)
+        run: |
+          pip install -e .
+      - name: Configure Git committer
+        run: |
+          git config --global user.email "github-actions[bot]"
+          git config --global user.name "GitHub Actions Bot"
+      - name: Build ${{ matrix.drone }}
+        run: |
+          DEBUG=1 eolab_drones build --type firmware --drone ${{ matrix.drone }}
+      - name: Delete old firmware for ${{ matrix.drone }}
+        uses: mknejp/delete-release-assets@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag: latest
+          assets: '${{ matrix.drone }}.px4'
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: "${{ matrix.drone}}.px4"
+          tag_name: latest
+          name: Latest Firmwares
+          draft: false
+          body: "This is an auto-generated set of our latest firmwares for all our drones"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
