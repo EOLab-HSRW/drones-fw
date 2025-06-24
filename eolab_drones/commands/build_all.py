@@ -21,39 +21,58 @@ class BuildAllCommand(Command):
                             choices=self.BUILD_TYPES,
                             help="Build type.")
 
+        parser.add_argument("--msgs-output",
+                            type=valid_dir_path,
+                            help="Output directory to copy PX4 msgs.")
+
+        parser.add_argument("--deb-output",
+                            type=valid_dir_path,
+                            help="Output directory .deb (only SITL).")
+
         parser.add_argument("--overwrite",
                             action="store_true",
                             help="Overwrite build if present.")
 
+
     def execute(self, args: Namespace):
+        failed_drones = []
 
         for drone in get_drones().keys():
-            build_cmd = ["easy_px4", "build",
+            build_cmd = ["eolab_drones", "build",
                          "--type", args.type,
-                         "--path", get_drone_path(drone),
-                         "--comps", get_components_path()]
+                         "--drone", drone]
 
             if args.type == "firmware":
                 build_cmd.extend(["--output", "."])
 
+            if args.msgs_output:
+                build_cmd.extend(["--msgs-output", args.msgs_output])
+
             if args.overwrite:
                 build_cmd.append("--overwrite")
 
-            process = subprocess.Popen(
+            if args.type == "sitl" and args.deb_output:
+                build_cmd.extend(["--deb-output", args.deb_output])
+
+            self.logger.info(f"\n=========== Buiding: {drone} ===========\n")
+
+            build = run_command(
                 build_cmd,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.STDOUT,
-                text=True  # Ensures output is decoded to string
+                live=True,
+                logger=self.logger
             )
 
-            for line in process.stdout:
-                print(line, end='')  # Avoid double newline
+            if build.returncode != 0:
+                self.logger.error(f"Buiding failed for drone: {drone}")
 
-            return_code = process.wait()
 
-            if return_code != 0:
-                sys.exit(return_code)
+        if failed_drones:
+            self.logger.error("Some builds failed: ")
+            for drone in failed_drones:
+                self.logger.error(f"  - {drone}")
+            sys.exit(1)
 
+        self.logger.info("All builds completed successfully")
 
         return None
 

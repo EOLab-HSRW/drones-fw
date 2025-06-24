@@ -31,6 +31,11 @@ class BuildDroneCommand(Command):
                             choices=get_drones().keys(),
                             help="Build type.")
 
+        parser.add_argument("--output",
+                            default=".",
+                            type=valid_dir_path,
+                            help="*.px4 firmware file output folder.")
+
         parser.add_argument("--msgs-output",
                             type=valid_dir_path,
                             help="Output directory to copy PX4 msgs.")
@@ -42,6 +47,11 @@ class BuildDroneCommand(Command):
         parser.add_argument("--deb-output",
                             type=valid_dir_path,
                             help="Output directory .deb (only SITL).")
+
+        parser.add_argument("--arch",
+                            default=os.environ.get('BUILD_ARCH', "amd64"),
+                            type=str,
+                            help="Output directory .deb (only SITL and --deb-output).")
 
 
     def get_current_branch(self):
@@ -64,7 +74,7 @@ class BuildDroneCommand(Command):
         custom_fw_version = drone_info["custom_fw_version"]
         branch = self.get_current_branch()
         release_type = "stable" if branch == "main" else branch
-        arch = os.environ.get('BUILD_ARCH', "amd64")
+        arch = args.arch
 
         package_name = f"eolab-sitl-{drone_name}"
         # format: eolab-sitl-<DRONE NAME>_<CUSTOM-FW-VERSION>_<RELEASE TYPE>_<ARCH>
@@ -109,15 +119,17 @@ Description: SITL firmware for EOLab {drone_name}.
                 self.logger.debug(f"Removing: {log_dir}")
                 shutil.rmtree(log_dir)
 
-        # Copy gz_plugins
-        gz_plugins_dir = opt_dir / "gz_plugins"
+        # Copy gz_plugins only if version is > 1.16.0
+        if int(drone_info["px4_version"].split(".")[1]) > 16:
+            self.logger.debug(f"PX4 version: {drone_info['px4_version']}. Adding gz_plugins")
+            gz_plugins_dir = opt_dir / "gz_plugins"
 
-        gz_plugins_dir.mkdir(parents=True, exist_ok=True)
-        subprocess.run(
-            f"cp {build_dir}/src/modules/simulation/gz_plugins/*.so {gz_plugins_dir}",
-            shell=True,
-            check=True
-        )
+            gz_plugins_dir.mkdir(parents=True, exist_ok=True)
+            subprocess.run(
+                f"cp {build_dir}/src/modules/simulation/gz_plugins/*.so {gz_plugins_dir}",
+                shell=True,
+                check=True
+            )
 
         # Create wrapper
         wrapper_path = deb_folder / "usr/bin"
@@ -171,8 +183,8 @@ exec /opt/{package_name}/bin/px4 "${{ARGS[@]}}"
             "--comps", get_components_path()
         ]
 
-        if args.type == "firmware":
-            build_cmd.extend(["--output", "."])
+        if args.type == "firmware" and args.output:
+            build_cmd.extend(["--output", args.output])
 
         if args.msgs_output:
             build_cmd.extend(["--msgs-output", str(args.msgs_output.resolve())])
