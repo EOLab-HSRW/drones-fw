@@ -12,6 +12,7 @@ jobs:
     outputs:
       run_bulk: ${{ steps.set-matrix.outputs.run_bulk }}
       matrix: ${{ steps.set-matrix.outputs.matrix }}
+      run_selective: ${{ steps.set-matrix.outputs.run_selective }}
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -43,9 +44,11 @@ jobs:
           # Check which drone folders changed
           changed_drones=$(echo "$changed_files" | grep '^eolab_drones/catalog/drones/' | cut -d/ -f4 | sort -u)
           json_array=$(echo "$changed_drones" | jq -R -s -c 'split("\n") | map(select(. != ""))')
+          run_selective=$([[ -n "$json_array" && "$json_array" != "[]" ]] && echo true || echo false)
 
           echo "run_bulk=false" >> $GITHUB_OUTPUT
           echo "matrix=$json_array" >> $GITHUB_OUTPUT
+          echo "run_selective=$run_selective" >> $GITHUB_OUTPUT
   bulk-build:
     needs: detect-changes
     if: ${{ needs.detect-changes.outputs.run_bulk == 'true' }}
@@ -94,7 +97,7 @@ jobs:
 
   selective-build:
     needs: detect-changes
-    if: ${{ fromJson(needs.detect-changes.outputs.matrix).length > 0 }}
+    if: ${{ needs.detect-changes.outputs.run_selective == 'true' }}
     runs-on: ubuntu-22.04
     strategy:
       matrix:
