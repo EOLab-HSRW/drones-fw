@@ -93,7 +93,7 @@ jobs:
 
   selective-build:
     needs: detect-changes
-    if: ${{ fromJson(needs.detect-changes.outputs.matrix) != [] }}
+    if: ${{ fromJson(needs.detect-changes.outputs.matrix).length > 0 }}
     runs-on: ubuntu-22.04
     strategy:
       matrix:
