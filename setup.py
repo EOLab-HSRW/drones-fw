@@ -1,10 +1,15 @@
 import sys
+import shutil
 from setuptools import setup, find_packages
 from pathlib import Path
 
 if not sys.platform.startswith("linux"):
     sys.stderr.write("This package is deliberately restricted to GNU/Linux systems.")
     sys.exit(1)
+
+for tool in ['git', 'dpkg-deb']:
+    if shutil.which(tool) is None:
+        sys.exit(f"Missing system dependency: {tool}. Please install it with 'sudo apt install {tool}'")
 
 __package__ = "eolab_drones"
 
