@@ -64,6 +64,7 @@ class BuildAllCommand(Command):
 
             if build.returncode != 0:
                 self.logger.error(f"Buiding failed for drone: {drone}")
+                failed_drones.append(drone)
 
 
         if failed_drones:
