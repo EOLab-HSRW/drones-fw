@@ -132,6 +132,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: latest
+          fail-if-no-assets: false
           assets: '${{ matrix.drone }}.px4'
       - name: Release
         uses: softprops/action-gh-release@v1
