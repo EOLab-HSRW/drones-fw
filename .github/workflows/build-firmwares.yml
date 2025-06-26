@@ -57,7 +57,7 @@ jobs:
           echo "matrix=$drone_matrix" >> $GITHUB_OUTPUT
   build:
     needs: detect-changes
-    if: ${{ fromJson(needs.detect-changes.outputs.matrix) != [] }}
+    if: ${{ needs.detect-changes.outputs.matrix != '[]' }}
     runs-on: ubuntu-22.04
     container:
       image: ghcr.io/eolab-hsrw/drones-fw:ubuntu-22.04
