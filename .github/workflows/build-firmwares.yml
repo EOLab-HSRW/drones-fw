@@ -54,6 +54,7 @@ jobs:
     container:
       image: ghcr.io/eolab-hsrw/drones-fw:ubuntu-22.04
     strategy:
+      fail-fast: false
       matrix:
         drone: ${{ fromJson(needs.detect-changes.outputs.matrix) }}
     steps:
