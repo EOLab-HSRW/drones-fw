@@ -9,7 +9,8 @@ if not sys.platform.startswith("linux"):
 
 for tool in ['git', 'dpkg-deb']:
     if shutil.which(tool) is None:
-        sys.exit(f"Missing system dependency: {tool}. Please install it with 'sudo apt install {tool}'")
+        sys.stderr.write(f"Missing system dependency: {tool}. Please install it with 'sudo apt install {tool}'")
+        sys.exit(1)
 
 __package__ = "eolab_drones"
 
