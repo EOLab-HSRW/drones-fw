@@ -52,7 +52,7 @@ jobs:
     if: ${{ needs.detect-changes.outputs.matrix != '[]' }}
     runs-on: ubuntu-22.04
     container:
-      image: ghcr.io/eolab-hsrw/drones-fw:ubuntu-22.04-amd64
+      image: ghcr.io/eolab-hsrw/drones-fw:ubuntu-22.04
     strategy:
       fail-fast: false
       matrix:
