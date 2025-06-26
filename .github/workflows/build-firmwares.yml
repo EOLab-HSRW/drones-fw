@@ -10,18 +10,29 @@ jobs:
   detect-changes:
     runs-on: ubuntu-latest
     outputs:
-      run_bulk: ${{ steps.set-matrix.outputs.run_bulk }}
       matrix: ${{ steps.set-matrix.outputs.matrix }}
-      run_selective: ${{ steps.set-matrix.outputs.run_selective }}
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Detect changes
+      - name: Set build matrix
         id: set-matrix
         run: |
-          echo "Detecting trigger type..."
+          echo "Determining build matrix..."
+
+          get_all_drones() {
+            find eolab_drones/catalog/drones -mindepth 1 -maxdepth 1 -type d -exec basename {} \; | jq -R -s -c 'split("\n") | map(select(. != ""))'
+          }
+
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            echo "Manual trigger: build all drones"
+            all_drones=$(get_all_drones)
+            echo "matrix=$all_drones" >> $GITHUB_OUTPUT
+
+            exit 0
+          fi
+
           if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
             echo "Manual trigger: force full build"
             echo "run_bulk=true" >> $GITHUB_OUTPUT
@@ -29,64 +40,24 @@ jobs:
             exit 0
           fi
 
-          echo "Checking changed files..."
           changed_files=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})
           echo "$changed_files"
 
           # Check if any file in global components changed
           if echo "$changed_files" | grep -q "^eolab_drones/catalog/components/"; then
-            echo "Global component change detected."
-            echo "run_bulk=true" >> $GITHUB_OUTPUT
-            echo "matrix=[]" >> $GITHUB_OUTPUT
+            echo "Global component changed: build all drones"
+            all_drones=$(get_all_drones)
+            echo "matrix=$all_drones" >> $GITHUB_OUTPUT
             exit 0
           fi
 
-          # Check which drone folders changed
           changed_drones=$(echo "$changed_files" | grep '^eolab_drones/catalog/drones/' | cut -d/ -f4 | sort -u)
-          json_array=$(echo "$changed_drones" | jq -R -s -c 'split("\n") | map(select(. != ""))')
-          run_selective=$([[ -n "$json_array" && "$json_array" != "[]" ]] && echo true || echo false)
+          drone_matrix=$(echo "$changed_drones" | jq -R -s -c 'split("\n") | map(select(. != ""))')
 
-          echo "run_bulk=false" >> $GITHUB_OUTPUT
-          echo "matrix=$json_array" >> $GITHUB_OUTPUT
-          echo "run_selective=$run_selective" >> $GITHUB_OUTPUT
-  bulk-build:
+          echo "matrix=$drone_matrix" >> $GITHUB_OUTPUT
+  build:
     needs: detect-changes
-    if: ${{ needs.detect-changes.outputs.run_bulk == 'true' }}
-    runs-on: ubuntu-22.04
-    container:
-      image: ghcr.io/eolab-hsrw/drones-fw:ubuntu-22.04
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          submodules: recursive
-      - name: Configure Git committer
-        run: |
-          git config --global user.email "github-actions[bot]"
-          git config --global user.name "GitHub Actions Bot"
-      - name: Build Firmwares
-        run: |
-          DEBUG=1 eolab_drones build_all --type firmware
-      - name: Delete old release assets
-        uses: mknejp/delete-release-assets@v1
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          tag: latest
-          assets: '*.px4'
-      - name: Release
-        uses: softprops/action-gh-release@v1
-        with:
-          files: "*.px4"
-          tag_name: latest
-          name: Latest Firmwares
-          draft: false
-          body: "This is an auto-generated set of our latest firmwares for all our drones"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-  selective-build:
-    needs: detect-changes
-    if: ${{ needs.detect-changes.outputs.run_selective == 'true' }}
+    if: ${{ fromJson(needs.detect-changes.outputs.matrix) != [] }}
     runs-on: ubuntu-22.04
     container:
       image: ghcr.io/eolab-hsrw/drones-fw:ubuntu-22.04
