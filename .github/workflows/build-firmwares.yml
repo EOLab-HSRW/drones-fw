@@ -72,7 +72,7 @@ jobs:
           git config --global user.name "GitHub Actions Bot"
       - name: Build ${{ matrix.drone }}
         run: |
-          DEBUG=1 eolab_drones build --type firmware --drone ${{ matrix.drone }}
+          DEBUG=1 easy_px4 build --type firmware --path /home/easy/easy-px4/demos/protoflyer/ --comps /home/easy/easy-px4/demos/components/
       - name: Delete old firmware for ${{ matrix.drone }}
         uses: mknejp/delete-release-assets@v1
         with:
