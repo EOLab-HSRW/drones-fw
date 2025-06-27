@@ -18,5 +18,4 @@ jobs:
       
       - name: Run build inside container
         run: |
-          docker run --rm ghcr.io/eolab-hsrw/easy-px4:ubuntu-22.04 eolab_drones build --type firmware --drone ${{ matrix.drone }}
-
+          docker run --rm ghcr.io/eolab-hsrw/easy-px4:ubuntu-22.04 eolab_drones build --type firmware --drone protoflyer
