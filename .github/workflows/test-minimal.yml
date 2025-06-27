@@ -1,0 +1,22 @@
+name: Test Build
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:  # Manual trigger
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Login to GHCR
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+      
+      - name: Force pull latest image
+        run: docker pull ghcr.io/eolab-hsrw/easy-px4:ubuntu-22.04
+      
+      - name: Run build inside container
+        run: |
+          docker run --rm ghcr.io/eolab-hsrw/easy-px4:ubuntu-22.04 eolab_drones build --type firmware --drone ${{ matrix.drone }}
+
