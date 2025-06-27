@@ -65,6 +65,8 @@ jobs:
       - name: Install eolab_drones
         run: |
           pip install .
+      - name: test env
+        run: echo "PYTHONPATH=$PYTHONPATH:/root/.local/lib/python3.10/site-packages/" >> $GITHUB_ENV
       - name: Configure Git committer
         run: |
           git config --global user.email "github-actions[bot]"
