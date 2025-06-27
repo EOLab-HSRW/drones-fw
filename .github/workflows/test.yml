@@ -14,5 +14,5 @@ jobs:
         run: docker pull ghcr.io/eolab-hsrw/easy-px4:ubuntu-22.04
 
       - name: Run build
-        run: docker run --rm ghcr.io/eolab-hsrw/easy-px4:ubuntu-22.04 DEBUG=1 easy_px4 build --type firmware --path /home/easy/easy-px4/demos/protoflyer/ --comps /home/easy/easy-px4/demos/components/
+        run: docker run --rm ghcr.io/eolab-hsrw/easy-px4:ubuntu-22.04 -e DEBUG=1 easy_px4 build --type firmware --path /home/easy/easy-px4/demos/protoflyer/ --comps /home/easy/easy-px4/demos/components/
 
