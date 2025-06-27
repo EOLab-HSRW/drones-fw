@@ -4,8 +4,6 @@ on:
   push:
     branches:
       - main
-    paths:
-      - eolab_drones/catalog/**
   workflow_dispatch:  # Manual trigger
 
 jobs:
