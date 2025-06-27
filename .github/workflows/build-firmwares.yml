@@ -52,8 +52,7 @@ jobs:
     if: ${{ needs.detect-changes.outputs.matrix != '[]' }}
     runs-on: ubuntu-22.04
     container:
-      image: ghcr.io/eolab-hsrw/easy-px4:ubuntu-22.04
-      options: --pull
+      image: ghcr.io/eolab-hsrw/easy-px4:ubuntu-22.04@sha256:6ea3422e114db5173408b739ddbfb5afc76497ef06924ba34b70d4264f1488d6 
     strategy:
       fail-fast: false
       matrix:
