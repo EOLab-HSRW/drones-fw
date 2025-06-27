@@ -15,6 +15,15 @@ jobs:
       
       - name: Force pull latest image
         run: docker pull ghcr.io/eolab-hsrw/easy-px4:ubuntu-22.04
+
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+
+      - name: Install eolab_drones
+        run: |
+          pip install .
       
       - name: Run build inside container
         run: |
