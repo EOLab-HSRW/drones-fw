@@ -51,8 +51,6 @@ jobs:
     needs: detect-changes
     if: ${{ needs.detect-changes.outputs.matrix != '[]' }}
     runs-on: ubuntu-22.04
-    container:
-      image: ghcr.io/eolab-hsrw/easy-px4:ubuntu-22.04@sha256:6ea3422e114db5173408b739ddbfb5afc76497ef06924ba34b70d4264f1488d6 
     strategy:
       fail-fast: false
       matrix:
@@ -63,16 +61,27 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Install eolab_drones
+      - name: Install eolab_drones inside container
         run: |
-          pip install .
+          docker run --rm \
+            -v ${{ github.workspace }}:/workspace \
+            -w /workspace \
+            ghcr.io/eolab-hsrw/easy-px4:ubuntu-22.04 \
+            bash -c "pip install . --verbose"
+      - name: Run firmware build
+        run: |
+          docker run --rm \
+            -v ${{ github.workspace }}:/workspace \
+            -w /workspace \
+            -e DEBUG=1 \
+            ghcr.io/eolab-hsrw/easy-px4:ubuntu-22.04 \
+            eolab_drones build --type firmware --drone ${{ matrix.drone }}
+
       - name: Configure Git committer
         run: |
           git config --global user.email "github-actions[bot]"
           git config --global user.name "GitHub Actions Bot"
-      - name: Build ${{ matrix.drone }}
-        run: |
-          DEBUG=1 eolab_drones build --type firmware --drone ${{ matrix.drone }}
+
       - name: Delete old firmware for ${{ matrix.drone }}
         uses: mknejp/delete-release-assets@v1
         with:
@@ -80,6 +89,7 @@ jobs:
           tag: latest
           fail-if-no-assets: false
           assets: '${{ matrix.drone }}.px4'
+
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
