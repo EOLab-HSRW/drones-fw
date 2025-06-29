@@ -45,6 +45,10 @@ class BuildDroneCommand(Command):
                             action="store_true",
                             help="Overwrite build if present.")
 
+        parser.add_argument("--skip-compilation",
+                            action="store_true",
+                            help="Skip firmware compilation. Useful for pulling up the msgs")
+
         parser.add_argument("--deb-output",
                             type=valid_dir_path,
                             help="Output directory .deb (only SITL).")
@@ -195,6 +199,9 @@ exec /opt/{package_name}/bin/px4 "${{ARGS[@]}}"
 
         if args.overwrite:
             build_cmd.append("--overwrite")
+
+        if args.skip_compilation:
+            build_cmd.append("--skip-compilation")
 
         build = run_command(
             cmd=build_cmd,
