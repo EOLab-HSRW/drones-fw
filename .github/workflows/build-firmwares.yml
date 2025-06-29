@@ -60,24 +60,46 @@ jobs:
       fail-fast: false
       matrix:
         drone: ${{ fromJson(needs.detect-changes.outputs.matrix) }}
+    continue-on-error: true
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-        with:
-          submodules: recursive
       - name: Install eolab_drones
         run: |
           pip install .
-      - name: test env
+      - name: Make env available
         run: echo "PYTHONPATH=$PYTHONPATH:/root/.local/lib/python3.10/site-packages/" >> $GITHUB_ENV
       - name: Configure Git committer
         run: |
           git config --global user.email "github-actions[bot]"
           git config --global user.name "GitHub Actions Bot"
       - name: Build ${{ matrix.drone }}
+        id: build-step
         run: |
+          set +e
           DEBUG=1 eolab_drones build --type firmware --drone ${{ matrix.drone }}
+          echo $? > build_exit_code.txt
+          set -e
+      - name: Write outcome file
+        if: ${{ always() }}
+        run: |
+          exit_code=$(cat build_exit_code.txt)
+
+          outcome="success"
+
+          if [ "$exit_code" -ne 0 ]; then
+
+            outcome="failure"
+          fi
+          jq -cn --arg drone "${{ matrix.drone }}" --arg outcome "$outcome" '{drone: $drone, outcome: $outcome}' > outcome.json
+      - name: Upload outcome artifact
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: outcome-${{ matrix.drone }}
+          path: outcome.json
       - name: Delete old firmware for ${{ matrix.drone }}
+        if: ${{ success() }}
         uses: mknejp/delete-release-assets@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -86,6 +108,7 @@ jobs:
           assets: '${{ matrix.drone }}.px4'
       - name: Release
         uses: softprops/action-gh-release@v1
+        if: ${{ success() }}
         with:
           files: "${{ matrix.drone}}.px4"
           tag_name: latest
@@ -94,3 +117,30 @@ jobs:
           body: "This is an auto-generated set of our latest firmwares for all our drones"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  collect-successes:
+    needs: build
+    runs-on: ubuntu-latest
+    outputs:
+      successful_drones: ${{ steps.collect.outputs.successful_drones }}
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: ./outcomes
+      - id: collect
+        run: |
+          successful=$(jq -c --slurp '[.[] | select(.outcome=="success") | .drone]' ./outcomes/*)
+          echo "successful_drones=$successful" >> $GITHUB_OUTPUT
+  trigger-dispatch:
+    needs: collect-successes
+    runs-on: ubuntu-latest
+    if: ${{ needs.collect-successes.outputs.successful_drones != '[]' }}
+    steps:
+      - name: Repository Dispatch with successful drones
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          event-type: firmware-built
+          client-payload: |
+            {
+              "successful_drones": ${{ needs.collect-successes.outputs.successful_drones }}
+            }
