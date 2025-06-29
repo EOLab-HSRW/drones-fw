@@ -67,6 +67,8 @@ jobs:
       - name: Install eolab_drones
         run: |
           pip install .
+      - name: Install jq
+        run: apt-get install -y jq
       - name: Make env available
         run: echo "PYTHONPATH=$PYTHONPATH:/root/.local/lib/python3.10/site-packages/" >> $GITHUB_ENV
       - name: Configure Git committer
