@@ -133,11 +133,11 @@ jobs:
           echo "Looking for outcome JSON files..."
           find ./outcomes -name '*.json'
 
-          successful=$(find ./outcomes -name '*.json' -exec cat {} + | jq -s '[.[] | select(.outcome=="success") | .drone]')
+          successful=$(find ./outcomes -name '*.json' -exec cat {} + | jq -c -s '[.[] | select(.outcome=="success") | .drone]')
+
           
           echo "Collected successful drones: $successful"
-
-          printf "successful_drones=%s\n" "$successful" >> $GITHUB_OUTPUT
+          echo "successful_drones=$successful" >> $GITHUB_OUTPUT
   trigger-dispatch:
     needs: collect-successes
     runs-on: ubuntu-latest
