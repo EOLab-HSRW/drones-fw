@@ -132,10 +132,7 @@ jobs:
         run: |
           echo "Looking for outcome JSON files..."
           find ./outcomes -name '*.json'
-
           successful=$(find ./outcomes -name '*.json' -exec cat {} + | jq -c -s '[.[] | select(.outcome=="success") | .drone]')
-
-          
           echo "Collected successful drones: $successful"
           echo "successful_drones=$successful" >> $GITHUB_OUTPUT
   trigger-dispatch:
