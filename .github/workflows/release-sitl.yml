@@ -1,0 +1,14 @@
+name: Release SITL
+
+on:
+  repository_dispatch:
+    types: [firmware-built]
+
+jobs:
+  print-successful-drones:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Echo successful drones
+        run: |
+          echo "Received event with drones:"
+          echo "${{ toJson(github.event.client_payload.successful_drones) }}"
