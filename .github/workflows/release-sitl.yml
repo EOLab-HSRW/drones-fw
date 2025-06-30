@@ -11,4 +11,4 @@ jobs:
       - name: Echo successful drones
         run: |
           echo "Received event with drones:"
-          echo "${{ toJson(github.event.client_payload.successful_drones) }}"
+          echo "${{ toJson(github.event.client_payload.successful_builds) }}"
