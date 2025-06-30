@@ -168,5 +168,5 @@ jobs:
           event-type: successful-builds
           client-payload: |
             {
-              "successful_builds": ${{ needs.collect-successes.outputs.successful_builds }}
+              "successful_builds": ${{ fromJson(needs.collect-successes.outputs.successful_drones) }}
             }
