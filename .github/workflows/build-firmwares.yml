@@ -144,7 +144,7 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     outputs:
-      successful_drones: ${{ steps.collect.outputs.successful_drones }}
+      successful_builds: ${{ steps.collect.outputs.successful_drones }}
     steps:
       - uses: actions/download-artifact@v4
         with:
@@ -168,5 +168,5 @@ jobs:
           event-type: successful-builds
           client-payload: |
             {
-              "successful_builds": ${{ fromJson(needs.collect-successes.outputs.successful_drones) }}
+              "successful_builds": ${{ needs.collect-successes.outputs.successful_builds }}
             }
