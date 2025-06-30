@@ -119,6 +119,27 @@ jobs:
           body: "This is an auto-generated set of our latest firmwares for all our drones"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  collect-report:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: ./outcomes
+      - id: report
+        run: |
+          echo "Gathering firmware build report..."
+          report=$(find ./outcomes -name '*.json' -exec cat {} + | jq -c -s)
+          echo "firmware_build_report=$report" >> $GITHUB_OUTPUT
+      - name: Repository Dispatch with full firmware build report
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          event-type: firmware-report
+          client-payload: |
+            {
+              "firmware_build_report": ${{ steps.report.outputs.firmware_build_report }}
+            }
   collect-successes:
     needs: build
     runs-on: ubuntu-latest
