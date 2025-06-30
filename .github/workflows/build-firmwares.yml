@@ -161,12 +161,13 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ needs.collect-successes.outputs.successful_builds != '[]' }}
     steps:
+      - name: Prepare JSON payload
+        id: json
+        run: |
+          echo "payload={\"successful_builds\":${{ needs.collect-successes.outputs.successful_builds }}}" >> $GITHUB_OUTPUT
       - name: Trigger event with successful builds
         uses: peter-evans/repository-dispatch@v3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           event-type: successful-builds
-          client-payload: |
-            {
-              "successful_builds": ${{ needs.collect-successes.outputs.successful_builds }}
-            }
+          client-payload: ${{ steps.json.outputs.payload }}
