@@ -130,22 +130,22 @@ jobs:
           path: ./outcomes
       - id: collect
         run: |
-          echo "Looking for outcome JSON files..."
+          echo "Collecting and filtering successful builds..."
           find ./outcomes -name '*.json'
           successful=$(find ./outcomes -name '*.json' -exec cat {} + | jq -c -s '[.[] | select(.outcome=="success") | .drone]')
-          echo "Collected successful drones: $successful"
-          echo "successful_drones=$successful" >> $GITHUB_OUTPUT
+          echo "Collected successful builds: $successful"
+          echo "successful_builds=$successful" >> $GITHUB_OUTPUT
   trigger-dispatch:
     needs: collect-successes
     runs-on: ubuntu-latest
-    if: ${{ needs.collect-successes.outputs.successful_drones != '[]' }}
+    if: ${{ needs.collect-successes.outputs.successful_builds != '[]' }}
     steps:
-      - name: Repository Dispatch with successful drones
+      - name: Trigger event with successful builds
         uses: peter-evans/repository-dispatch@v3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          event-type: firmware-built
+          event-type: successful-builds
           client-payload: |
             {
-              "successful_drones": ${{ needs.collect-successes.outputs.successful_drones }}
+              "successful_builds": ${{ needs.collect-successes.outputs.successful_builds }}
             }

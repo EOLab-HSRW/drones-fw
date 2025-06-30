@@ -2,7 +2,7 @@ name: Release SITL
 
 on:
   repository_dispatch:
-    types: [firmware-built]
+    types: [successful-builds]
 
 jobs:
   print-successful-drones:
