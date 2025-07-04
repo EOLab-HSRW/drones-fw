@@ -4,8 +4,16 @@
 
 ## Install
 
+Just for our catalog information:
+
+```
+EASY_PX4_INSTALL_DEPS=false EASY_PX4_CLONE_PX4=false pip install git+https://github.com/EOLab-HSRW/drones-fw.git@main#egg=eolab_drones
+```
+
+For local development :
+
 ```console
-pip install git+https://github.com/EOLab-HSRW/drones-fw.git@main#egg=eolab_drones
+pip install .
 ```
 
 ## Build Firmware Locally
