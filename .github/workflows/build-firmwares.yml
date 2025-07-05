@@ -169,3 +169,13 @@ jobs:
             {
               "successful_builds": ${{ needs.collect-successes.outputs.successful_builds }}
             }
+      - name: Repository Dispatch to EOLab-HSRW/px4_msgs
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.PX4_MSGS_REPO_DISPATCH_PAT }}
+          repository: EOLab-HSRW/px4_msgs
+          event-type: successful-builds
+          client-payload: |
+            {
+              "successful_builds": ${{ needs.collect-successes.outputs.successful_builds }}
+            }
