@@ -79,6 +79,7 @@ class BuildDroneCommand(Command):
 
         drone_name = args.drone
         custom_fw_version = drone_info["custom_fw_version"]
+        frame_id = drone_info["id"]
         branch = self.get_current_branch()
         release_type = "stable" if branch == "main" else branch
         arch = args.arch
@@ -146,6 +147,11 @@ Description: SITL firmware for EOLab {drone_name}.
         wrapper_script.write_text(f"""#!/bin/bash
 DEFAULT_WORKDIR="/opt/{package_name}/rootfs"
 ARGS=()
+
+export PX4_GZ_STANDALONE="${{PX4_GZ_STANDALONE:-1}}"
+export PX4_UXRCE_DDS_NS="${{PX4_UXRCE_DDS_NS:-{drone_name}}}"
+export PX4_SYS_AUTOSTART="${{PX4_SYS_AUTOSTART:-{frame_id}}}"
+export PX4_SIMULATOR="${{PX4_SIMULATOR:-gz}}"
 
 # Check if the user already passed -w
 SKIP_W_OPTION=false
