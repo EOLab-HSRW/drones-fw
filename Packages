@@ -4,10 +4,10 @@ Architecture: amd64
 Maintainer: Harley Lara <contact@harleylara.com>
 Depends: libgz-transport13, libgz-sensors8, libgz-plugin2
 Filename: ./eolab-sitl-condor_0.1.0_stable_amd64.deb
-Size: 26398782
-MD5sum: 4d09104c1e426ed62ba4995c25810888
-SHA1: 3e13c98e4a90c615d0a71697f0a80262f2669d0a
-SHA256: e4e2d85299761146b4f601ce26e021ef8d54713ef43c43dd627f42c78aeb7b3e
+Size: 13213084
+MD5sum: d8ec714372f02829ffb5024bfb6e343a
+SHA1: bf34a30868a19bc613a765004bdf0b7a6b54c085
+SHA256: c71bcfcab7f0b7987e6b8f2fd9ec7a30a32c03063914dea91897bfcbf9454181
 Section: utils
 Priority: optional
 Description: SITL firmware for EOLab condor.
@@ -18,10 +18,10 @@ Architecture: amd64
 Maintainer: Harley Lara <contact@harleylara.com>
 Depends: libgz-transport13, libgz-sensors8, libgz-plugin2
 Filename: ./eolab-sitl-phoenix_0.1.0_stable_amd64.deb
-Size: 26395660
-MD5sum: 4faafb4c485a2432e220af5fde0f4a10
-SHA1: 178fb3aec04d931d3e7cfe8e1a5749139bef130b
-SHA256: 312ca3c4c046d43a1d6c42dced6d97cf46de13b7b366b14da9de8ea82bb26022
+Size: 13209470
+MD5sum: f6d9e2deb4d559437b33dcdd92de9171
+SHA1: c156bf33d62b199e9a38d32d05c6907cdd6907a4
+SHA256: 35c755c86cc8ad85a294e0de0d4e8177180b4ae919c2171c9e57452ad53132da
 Section: utils
 Priority: optional
 Description: SITL firmware for EOLab phoenix.
@@ -32,10 +32,10 @@ Architecture: amd64
 Maintainer: Harley Lara <contact@harleylara.com>
 Depends: libgz-transport13, libgz-sensors8, libgz-plugin2
 Filename: ./eolab-sitl-platypus_0.1.0_stable_amd64.deb
-Size: 26399202
-MD5sum: 7e754b66dea112570ba42beda56f070f
-SHA1: fc4e4e451bfba480644c0a7537ace81921f05756
-SHA256: 082f01a254a05d8fd29cff083eafa7e27e6eb603b49689439c8327d7c57619f8
+Size: 13213754
+MD5sum: 0ac8881584ef3eb319ec05962428fa6b
+SHA1: 2bda3e480178fcc4be842245889c072501fe0e4a
+SHA256: 774f7eb4c2ed62f16b457ffed6de161906f72de78e790a44e05bb511159a28ed
 Section: utils
 Priority: optional
 Description: SITL firmware for EOLab platypus.
@@ -46,10 +46,10 @@ Architecture: amd64
 Maintainer: Harley Lara <contact@harleylara.com>
 Depends: libgz-transport13, libgz-sensors8, libgz-plugin2
 Filename: ./eolab-sitl-protoflyer_0.1.0_stable_amd64.deb
-Size: 31944010
-MD5sum: dd6e0c4ae73e785d0153ec1e91e06327
-SHA1: a13143a69c42ce463279b7042a3f0c838a3f5cb9
-SHA256: 6d84f6ee87c57042eba21176a7c10457a589875837f3653bafcd5e77aaec0649
+Size: 17731688
+MD5sum: a240eeea0a46f02eb94eb8c5e9cb8413
+SHA1: ab585df65ca85fdf0bf15405c9918355a4a6ad61
+SHA256: ab7008dffb2fbdb6a44afa6499cb91793c0c29c791c9342e7edd4ae7a8c1d055
 Section: utils
 Priority: optional
 Description: SITL firmware for EOLab protoflyer.
@@ -64,6 +64,20 @@ Size: 26408378
 MD5sum: 663bcddf95a09119747daf7b14e6224f
 SHA1: af93e8888c7773566230de5157085238e7dc0656
 SHA256: 133c4c5c16b8551b04cf5b86df1dfcc672c0cc5115e8a441703dd2a850372bd0
+Section: utils
+Priority: optional
+Description: SITL firmware for EOLab sar.
+
+Package: eolab-sitl-sar
+Version: 0.1.1
+Architecture: amd64
+Maintainer: Harley Lara <contact@harleylara.com>
+Depends: libgz-transport13, libgz-sensors8, libgz-plugin2
+Filename: ./eolab-sitl-sar_0.1.1_stable_amd64.deb
+Size: 13210208
+MD5sum: 0103bd6c71ddfd5f92679bfc5ea154e3
+SHA1: 974864520ea62f62b2173da4592214443d7a8f9e
+SHA256: 56cd602a16a61561b537cd7606c2de3471b65a953a384cfec20225411c102a7c
 Section: utils
 Priority: optional
 Description: SITL firmware for EOLab sar.
