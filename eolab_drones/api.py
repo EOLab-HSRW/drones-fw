@@ -1,7 +1,7 @@
 from types import NoneType
 from typing import Union
 from pathlib import Path
-import easy_px4
+import easy_px4_utils
 from eolab_drones.paths import DRONES_DIR, COMPONENTS_DIR
 
 def get_catalog() -> dict[str, dict]:
@@ -14,7 +14,7 @@ def get_catalog() -> dict[str, dict]:
     components = [f.name for f in COMPONENTS_DIR.iterdir() if f.is_file()]
 
     for info_file in DRONES_DIR.rglob("info.toml"):
-        info_dict = easy_px4.load_info(info_file)
+        info_dict = easy_px4_utils.load_info(info_file)
         name = info_dict.pop("name")  # remove and get the 'name' key
         drones[name] = info_dict
 
@@ -72,29 +72,3 @@ def get_components_path() -> str:
     Returns path to components files.
     """
     return str(COMPONENTS_DIR.resolve())
-
-def get_build_dir(drone: str, build_type: str = "sitl") -> Union[Path, NoneType]:
-
-    drone_info = __check_drone(drone)
-
-    general_build = easy_px4.get_build_dir()
-
-    if build_type == "sitl":
-         drone_build = general_build / f"px4_sitl_{drone}"
-    else:
-        drone_build = general_build / f"{drone_info['vendor']}_{drone_info['model']}_{drone}"
-
-    if not drone_build.is_dir() and not drone_build.exists():
-        return None
-
-    return drone_build
-
-
-def get_stil_bin(drone: str) -> Union[Path, NoneType]:
-
-    drone_build = get_build_dir(drone, "sitl")
-
-    if not drone_build:
-        return None
-
-    return drone_build / "bin" / "px4"
