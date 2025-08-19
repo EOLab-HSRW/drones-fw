@@ -29,8 +29,7 @@ setup(
     packages=find_packages(),
     python_requires='>=3.10',
     install_requires=[
-        # "easy_px4 @ git+https://github.com/EOLab-HSRW/easy-px4.git@main#egg=easy_px4"
-        "easy_px4_utils @ git+https://github.com/EOLab-HSRW/easy-px4.git@main#subdirectory=easy-px4-utils"
+        "easy_px4_utils @ git+https://github.com/EOLab-HSRW/easy-px4.git@main#subdirectory=easy-px4-utils#egg=easy_px4_utils"
     ],
     include_package_data=True,
     entry_points={
