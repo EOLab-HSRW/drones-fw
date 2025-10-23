@@ -1,7 +1,8 @@
 import subprocess
 from argparse import Namespace, ArgumentParser
 import sys
-from easy_px4.backend import Command, valid_dir_path, run_command
+from easy_px4.backend import Command, run_command
+from easy_px4_utils import valid_dir_path
 from ..api import get_drones, get_drone_path, get_components_path
 
 class BuildAllCommand(Command):
