@@ -14,8 +14,8 @@ def get_catalog() -> dict[str, dict]:
     components = [f.name for f in COMPONENTS_DIR.iterdir() if f.is_file()]
 
     for info_file in DRONES_DIR.rglob("info.toml"):
-        info_dict = easy_px4_utils.load_info(info_file)
-        name = info_dict.pop("name")  # remove and get the 'name' key
+        info_dict = easy_px4_utils.load_info_dict(info_file)
+        name = info_dict["name"]
         drones[name] = info_dict
 
     return {"drones": drones, "components": components}
