@@ -18,6 +18,7 @@
 
 . ${R}etc/init.d/rc.mc_defaults
 . ${R}etc/init.d/radiomaster_tx16s # radio params
+. ${R}etc/init.d/common # common params
 
 # MAV_TYPE_HEXAROTOR 13
 param set-default MAV_TYPE 13
@@ -63,8 +64,9 @@ then
     # Range finder sensor
     # DOES NOT HAVE
 
-    # TODO: set the voltage divider
-    param set-default BAT1_V_DIV 12.05273533
+    # TODO: this is the stock Battery
+    # with low capacity let's change it
+    param set-default BAT1_V_DIV 16.13267326
 fi
 
 if ver hwcmp "PX4_SITL"
@@ -141,9 +143,9 @@ param set-default CA_ROTOR5_KM -0.05
 ## Battery
 #####################################
 param set-default BAT1_SOURCE 0
-param set-default BAT1_N_CELLS 6
+param set-default BAT1_N_CELLS 4
 param set-default BAT1_V_CHARGED 4.02
 param set-default BAT1_V_EMPTY 3.7
-param set-default BAT1_CAPACITY 11000
+param set-default BAT1_CAPACITY 5000
 # TODO: 
 # - BAT1_R_INTERNAL
