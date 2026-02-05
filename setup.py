@@ -19,7 +19,7 @@ with (Path(__file__).resolve().parent / "README.md").open(encoding='utf-8') as f
 
 setup(
     name=__package__,
-    version='0.0.3',
+    version='0.0.4',
     url='https://github.com/EOLab-HSRW/drones-fw.git',
     author='Harley Lara',
     author_email='harley.lara@outlook.com',
@@ -34,7 +34,7 @@ setup(
     include_package_data=True,
     entry_points={
         "console_scripts": [
-            f"{__package__} = {__package__}.main:main",
+            f"eolab-drones = {__package__}.main:main",
         ],
     },
 )
