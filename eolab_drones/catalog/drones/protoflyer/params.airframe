@@ -11,11 +11,12 @@
 # @output Motor4 motor 4
 #
 # @maintainer Harley Lara <contact@harleylara.com>
-# @url https://drones.eolab.de/protoflyer/README.html
+# @url https://drones.eolab.de/protoflyer
 #
 
 . ${R}etc/init.d/rc.mc_defaults
 . ${R}etc/init.d/radiomaster_tx16s # radio params
+. ${R}etc/init.d/common # common params
 
 param set-default MAV_TYPE 2
 
@@ -33,16 +34,16 @@ then
     #####################################
 
     param set-default PWM_MAIN_MIN1 1150
-    param set-default PWM_MAIN_MAX1 1900
+    param set-default PWM_MAIN_MAX1 1950
 
     param set-default PWM_MAIN_MIN2 1150
-    param set-default PWM_MAIN_MAX2 1900
+    param set-default PWM_MAIN_MAX2 1950
 
     param set-default PWM_MAIN_MIN3 1150
-    param set-default PWM_MAIN_MAX3 1900
+    param set-default PWM_MAIN_MAX3 1950
 
     param set-default PWM_MAIN_MIN4 1150
-    param set-default PWM_MAIN_MAX4 1900
+    param set-default PWM_MAIN_MAX4 1950
 
     #####################################
     ## Sensors
@@ -96,18 +97,18 @@ param set-default EKF2_IMU_POS_Z 0
 
 param set-default CA_ROTOR_COUNT 4
 
-param set-default CA_ROTOR0_PX 0.158
-param set-default CA_ROTOR0_PY 0.158
+param set-default CA_ROTOR0_PX 0.170
+param set-default CA_ROTOR0_PY 0.170
 
-param set-default CA_ROTOR1_PX -0.158
-param set-default CA_ROTOR1_PY -0.158
+param set-default CA_ROTOR1_PX -0.170
+param set-default CA_ROTOR1_PY -0.170
 
-param set-default CA_ROTOR2_PX 0.158
-param set-default CA_ROTOR2_PY -0.158
+param set-default CA_ROTOR2_PX 0.170
+param set-default CA_ROTOR2_PY -0.170
 param set-default CA_ROTOR2_KM -0.05
 
-param set-default CA_ROTOR3_PX -0.158
-param set-default CA_ROTOR3_PY 0.158
+param set-default CA_ROTOR3_PX -0.170
+param set-default CA_ROTOR3_PY 0.170
 param set-default CA_ROTOR3_KM -0.05
 
 
@@ -118,6 +119,9 @@ param set-default BAT1_SOURCE 0
 param set-default BAT1_N_CELLS 4
 param set-default BAT1_V_CHARGED 4.02
 param set-default BAT1_V_EMPTY 3.7
-param set-default BAT1_CAPACITY 7000
+param set-default BAT1_CAPACITY 5000
+
+# TODO: ADD Voltage divider: 7.88372850 (measured)
+# TODO: Add amp per volt divider: 55.41203308 (measured)
 # TODO: 
 # - BAT1_R_INTERNAL
