@@ -79,7 +79,7 @@ jobs:
         id: build-step
         run: |
           set +e
-          DEBUG=1 eolab_drones build --type firmware --drone ${{ matrix.drone }}
+          DEBUG=1 eolab-drones build --type firmware --drone ${{ matrix.drone }}
           echo $? > build_exit_code.txt
           set -e
       - name: Write outcome file
