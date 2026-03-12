@@ -45,12 +45,6 @@ then
     param set-default PWM_MAIN_MIN4 1150
     param set-default PWM_MAIN_MAX4 1950
 
-    #####################################
-    ## Sensors
-    #####################################
-
-
-    param set-default BAT1_V_DIV 12.05273533
 fi
 
 if ver hwcmp "PX4_SITL"
@@ -92,6 +86,14 @@ param set-default EKF2_IMU_POS_Y 0
 param set-default EKF2_IMU_POS_Z 0
 
 #####################################
+# GPS placement
+#####################################
+
+param set-default EKF2_GPS_POS_X 0
+param set-default EKF2_GPS_POS_Y 0.05
+param set-default EKF2_GPS_POS_Z -0.15
+
+#####################################
 # Actuators
 #####################################
 
@@ -120,8 +122,7 @@ param set-default BAT1_N_CELLS 4
 param set-default BAT1_V_CHARGED 4.02
 param set-default BAT1_V_EMPTY 3.7
 param set-default BAT1_CAPACITY 5000
-
-# TODO: ADD Voltage divider: 7.88372850 (measured)
-# TODO: Add amp per volt divider: 55.41203308 (measured)
+param set-default BAT1_A_PER_V 55.41203308
+param set-default BAT1_V_DIV 7.88372850
 # TODO: 
 # - BAT1_R_INTERNAL
