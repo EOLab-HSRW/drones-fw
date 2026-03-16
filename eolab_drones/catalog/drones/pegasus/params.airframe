@@ -39,22 +39,22 @@ then
     # ESC Calibration
     #####################################
 
-    param set-default PWM_MAIN_MIN1 1150
+    param set-default PWM_MAIN_MIN1 1000
     param set-default PWM_MAIN_MAX1 1900
 
-    param set-default PWM_MAIN_MIN2 1150
+    param set-default PWM_MAIN_MIN2 1000
     param set-default PWM_MAIN_MAX2 1900
 
-    param set-default PWM_MAIN_MIN3 1150
+    param set-default PWM_MAIN_MIN3 1000
     param set-default PWM_MAIN_MAX3 1900
 
-    param set-default PWM_MAIN_MIN4 1150
+    param set-default PWM_MAIN_MIN4 1000
     param set-default PWM_MAIN_MAX4 1900
 
-    param set-default PWM_MAIN_MIN5 1150
+    param set-default PWM_MAIN_MIN5 1000
     param set-default PWM_MAIN_MAX5 1900
 
-    param set-default PWM_MAIN_MIN6 1150
+    param set-default PWM_MAIN_MIN6 1000
     param set-default PWM_MAIN_MAX6 1900
 
     #####################################
@@ -66,7 +66,7 @@ then
 
     # TODO: this is the stock Battery
     # with low capacity let's change it
-    param set-default BAT1_V_DIV 16.13267326
+    param set-default BAT1_V_DIV 15.98235607
 fi
 
 if ver hwcmp "PX4_SITL"
@@ -129,14 +129,14 @@ param set-default CA_ROTOR2_PX 0.34
 param set-default CA_ROTOR2_PY -0.20
 param set-default CA_ROTOR2_KM -0.05
 
-param set-default CA_ROTOR3_PX 0.20
-param set-default CA_ROTOR3_PY -0.34
+param set-default CA_ROTOR3_PX -0.34
+param set-default CA_ROTOR3_PY 0.20
 
-param set-default CA_ROTOR4_PX 0.20
-param set-default CA_ROTOR4_PY 0.34
+param set-default CA_ROTOR4_PX 0.34
+param set-default CA_ROTOR4_PY 0.20
 
-param set-default CA_ROTOR5_PX -0.20
-param set-default CA_ROTOR5_PY -0.34
+param set-default CA_ROTOR5_PX -0.34
+param set-default CA_ROTOR5_PY -0.30
 param set-default CA_ROTOR5_KM -0.05
 
 #####################################
@@ -146,6 +146,7 @@ param set-default BAT1_SOURCE 0
 param set-default BAT1_N_CELLS 4
 param set-default BAT1_V_CHARGED 4.02
 param set-default BAT1_V_EMPTY 3.7
-param set-default BAT1_CAPACITY 5000
+param set-default BAT1_CAPACITY 12000
+param set-default BAT1_A_PER_V 32.75749969
 # TODO: 
 # - BAT1_R_INTERNAL

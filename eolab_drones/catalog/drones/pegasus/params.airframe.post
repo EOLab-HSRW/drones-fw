@@ -1,1 +1,1 @@
-. ${R}etc/init.d/common.post # common params
+tune_control play -m "MFT100L8EG>C<L16BGL8EL16EG>C<BGL8E>CDCL2E"
