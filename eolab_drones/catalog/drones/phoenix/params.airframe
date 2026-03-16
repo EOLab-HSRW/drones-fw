@@ -17,11 +17,17 @@
 #
 
 . ${R}etc/init.d/rc.mc_defaults
-. ${R}etc/init.d/radiomaster_tx16s # radio params
+. ${R}etc/init.d/common
+. ${R}etc/init.d/rc_in_mode_legacy
+
+#####################################
+# MAVLink
+#####################################
 
 # MAV_TYPE_HEXAROTOR 13
 param set-default MAV_TYPE 13
 param set-default MAV_SYS_ID 103
+param set-default MAV_PROTO_VER 2 # always use MAVLink Version 2
 
 if ! ver hwcmp "PX4_SITL"
 then

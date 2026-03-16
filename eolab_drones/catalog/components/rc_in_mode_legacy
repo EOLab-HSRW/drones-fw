@@ -1,0 +1,26 @@
+#####################################
+# Manual Input Sources (legacy)
+#####################################
+
+# PX4 firmware versions up to and including `1.15.4`
+# are considered legacy.
+
+# From `1.16.0` onward, `COM_RC_IN_MODE` supports
+# explicit input priority configurations, for example:
+#   - RC > MAVLink 1 > MAVLink 2
+#   - MAVLink 1 > MAVLink 2 > RC
+#   - RC > MAVLink 2 > MAVLink 1
+#   - MAVLink 2 > MAVLink 1 > RC
+
+# In PX4 `1.15.4` and earlier, only values `0` to `4`
+# are supported.
+#
+# Setting `COM_RC_IN_MODE` to `2` provides the closest
+# approximation to the desired behavior of value `5`
+# in newer versions, while keeping the setup simpler
+# and less confusing for pilots.
+
+# Pilot documentation:
+# drones.eolab.de/common-operational-manual/radio-control
+
+param set-default COM_RC_IN_MODE 2 # RC or MAVLink with fallback
