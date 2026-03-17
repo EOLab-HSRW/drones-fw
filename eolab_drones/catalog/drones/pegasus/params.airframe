@@ -64,9 +64,6 @@ then
     # Range finder sensor
     # DOES NOT HAVE
 
-    # TODO: this is the stock Battery
-    # with low capacity let's change it
-    param set-default BAT1_V_DIV 15.98235607
 fi
 
 if ver hwcmp "PX4_SITL"
@@ -143,10 +140,10 @@ param set-default CA_ROTOR5_KM -0.05
 ## Battery
 #####################################
 param set-default BAT1_SOURCE 0
-param set-default BAT1_N_CELLS 4
+param set-default BAT1_N_CELLS 6
 param set-default BAT1_V_CHARGED 4.02
 param set-default BAT1_V_EMPTY 3.7
 param set-default BAT1_CAPACITY 12000
-param set-default BAT1_A_PER_V 32.75749969
-# TODO: 
+param set-default BAT1_V_DIV 15.87664795
+param set-default BAT1_A_PER_V 31.66210556
 # - BAT1_R_INTERNAL
