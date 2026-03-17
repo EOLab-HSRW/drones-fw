@@ -28,9 +28,17 @@ param set-default MAV_TYPE 14
 # FMU placement and orientation
 #####################################
 
-param set-default EKF2_IMU_POS_X 0.10
+param set-default EKF2_IMU_POS_X 0
 param set-default EKF2_IMU_POS_Y 0
 param set-default EKF2_IMU_POS_Z 0
+
+#####################################
+# GPU placementn
+#####################################
+
+param set-default EKF2_GPS_POS_X 0.085
+param set-default EKF2_GPS_POS_Y -0.110
+param set-default EKF2_GPS_POS_Z -0.15
 
 #####################################
 # Actuators
@@ -111,8 +119,12 @@ param set-default PWM_MAIN_MAX8 1900
 ## Sensors
 #####################################
 
-# Range finder sensor
-param set-default SENS_EN_TRANGER 3 # TeraRanger Evo 60m
+# Range finder sensor: disable for now
+# umpredictable vetical acceration at low
+# thrust on the RC sticks.
+# The logs show wrog reading before that
+# happend
+param set-default SENS_EN_TRANGER 0 # TeraRanger Evo 60m
 param set-default SER_TEL1_BAUD 57600
 
 #####################################
