@@ -1,6 +1,7 @@
 from types import NoneType
 from typing import Union
 from pathlib import Path
+
 import easy_px4_utils
 from eolab_drones.paths import DRONES_DIR, COMPONENTS_DIR
 

@@ -126,3 +126,12 @@ param set-default BAT1_A_PER_V 55.41203308
 param set-default BAT1_V_DIV 7.88372850
 # TODO: 
 # - BAT1_R_INTERNAL
+
+
+# TUNING
+param set-default IMU_GYRO_CUTOFF 30
+param set-default IMU_GYRO_NF0_FRQ 48
+param set-default IMU_GYRO_NF0_BW 15
+
+param set-default IMU_GYRO_NF1_FRQ 90
+param set-default IMU_GYRO_NF1_BW 20

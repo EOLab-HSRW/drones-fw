@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "eolab_drones"
+version = "0.0.5"
+description = "Python API for EOLab drones firmware metadata."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+  "easy_px4_utils",
+]
+
+[project.optional-dependencies]
+cli = [
+  "eolab_drones_cli==0.0.4",
+]
+
+[tool.setuptools.packages.find]
+include = ["eolab_drones*"]
+namespaces = false
+
+[tool.setuptools.package-data]
+eolab_drones = [
+  "catalog/**/*",
+]

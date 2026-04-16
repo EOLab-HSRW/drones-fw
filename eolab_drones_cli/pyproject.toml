@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "eolab_drones_cli"
+version = "0.0.4"
+description = "CLI for EOLab drones."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+  "eolab_drones>=0.0.5",
+]
+
+[project.scripts]
+eolab-drones = "eolab_drones_cli.main:main"
+
+[tool.setuptools.packages.find]
+include = ["eolab_drones_cli*"]
+namespaces = false

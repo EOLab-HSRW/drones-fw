@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - eolab_drones/catalog/**
+      - eolab_drones/eolab_drones/catalog/**
       - .github/workflows/build-firmwares.yml
   workflow_dispatch:  # Manual trigger
 

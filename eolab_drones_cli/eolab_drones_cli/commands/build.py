@@ -6,7 +6,8 @@ import tarfile
 from argparse import Namespace, ArgumentParser
 from easy_px4.backend import Command, run_command
 from easy_px4.api import get_build_dir
-from ..api import get_drones, get_drone_path, get_components_path, get_drone
+
+from eolab_drones import get_drones, get_drone_path, get_components_path, get_drone
 from easy_px4_utils import valid_dir_path
 
 

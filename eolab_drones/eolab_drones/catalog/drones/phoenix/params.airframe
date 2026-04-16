@@ -142,17 +142,31 @@ param set-default CA_ROTOR5_PY -0.29
 param set-default CA_ROTOR5_KM -0.05
 
 
-
-
+#####################################
+# GPS Sensors
+#####################################
 
 # note: the GPS2 physical port is map to TELEM4 internally, see: https://docs.px4.io/v1.11/en/flight_controller/pixhawk-2.html#serial_ports
-param set-default GPS_2_CONFIG 202
-param set-default SER_GPS2_BAUD 0 # Baudrate Auto
+param set-default GPS_2_CONFIG 0 # we are not using GPS2 (physical port on FMU)
+# param set-default GPS_2_CONFIG 202
+# param set-default SER_GPS2_BAUD 0 # Baudrate Auto
 
-param set-default EKF2_GPS_CTRL 15 # dual antenna heading
+# Note about dual-antenna heading:
+# The Here2 GPS module from HereLink
+# is based on the u-blox M8N does not
+# support "moving-baseline" in 
+# RTK setups like dual u-blox F9P.
+#
+# Phoenix is using 2 Here2 GPS modules
+# therefor is not possible for this module
+# to do dual antenna heading.
+param set-default EKF2_GPS_CTRL 7 # (default, but set here to keep it explicit)
+param set-default EKF2_GPS_POS_X 0.0
+param set-default EKF2_GPS_POS_Y -0.15
+param set-default EKF2_GPS_POS_Z -0.1
 
 #####################################
-## Battery
+# Battery
 #####################################
 param set-default BAT1_SOURCE 0
 param set-default BAT1_N_CELLS 6
