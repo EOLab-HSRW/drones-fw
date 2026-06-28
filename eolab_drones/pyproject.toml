@@ -16,6 +16,10 @@ dependencies = [
 cli = [
   "eolab_drones_cli==0.0.4",
 ]
+test = [
+  "pytest",
+  "mypy",
+]
 
 [tool.setuptools.packages.find]
 include = ["eolab_drones*"]
@@ -25,3 +29,10 @@ namespaces = false
 eolab_drones = [
   "catalog/**/*",
 ]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.mypy]
+python_version = "3.10"
+ignore_missing_imports = true

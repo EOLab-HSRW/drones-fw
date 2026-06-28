@@ -1,0 +1,143 @@
+name: Test & Publish eolab_drones
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "eolab_drones/**"
+      - ".github/workflows/release-pypi-eolab-drones.yml"
+  push:
+    branches: [main]
+    paths:
+      - "eolab_drones/**"
+      - ".github/workflows/release-pypi-eolab-drones.yml"
+    tags:
+      - "eolab-drones-v*"
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: Test ${{ matrix.os }} ${{ matrix.arch }} Python ${{ matrix.python-version }}
+    runs-on: ${{ matrix.runner }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.11", "3.12"]
+        include:
+          # amd64 / x64
+          - os: ubuntu-22.04
+            arch: amd64
+            runner: ubuntu-22.04
+          - os: ubuntu-24.04
+            arch: amd64
+            runner: ubuntu-24.04
+          - os: ubuntu-latest
+            arch: amd64
+            runner: ubuntu-latest
+
+          # arm64
+          - os: ubuntu-22.04
+            arch: arm64
+            runner: ubuntu-22.04-arm
+          - os: ubuntu-24.04
+            arch: arm64
+            runner: ubuntu-24.04-arm
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Show runner platform
+        run: |
+          uname -a
+          lsb_release -a || true
+          python3 --version || true
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install package
+        working-directory: eolab_drones
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e .
+
+      - name: Import smoke test
+        run: |
+          python -c "import eolab_drones"
+
+      - name: Build check
+        working-directory: eolab_drones
+        run: |
+          python -m pip install --upgrade build
+          python -m build
+
+  build:
+    name: Build release distribution
+    needs:
+      - test
+    runs-on: ubuntu-24.04
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Validate tag matches pyproject version
+        if: startsWith(github.ref, 'refs/tags/eolab-drones-v')
+        working-directory: eolab_drones
+        run: |
+          python - <<'PY'
+          import os
+          import tomllib
+          from pathlib import Path
+
+          tag = os.environ["GITHUB_REF_NAME"]
+          expected = tag.removeprefix("eolab-drones-v")
+
+          data = tomllib.loads(Path("pyproject.toml").read_text())
+          actual = data["project"]["version"]
+
+          if actual != expected:
+              raise SystemExit(
+                  f"Tag version {expected!r} does not match pyproject version {actual!r}"
+              )
+          PY
+
+      - name: Build package
+        working-directory: eolab_drones
+        run: |
+          python -m pip install --upgrade pip build
+          python -m build
+
+      - name: Store distribution
+        uses: actions/upload-artifact@v4
+        with:
+          name: eolab-drones-dist
+          path: eolab_drones/dist/*
+
+  publish:
+    name: Publish eolab_drones to PyPI
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/eolab-drones-v')
+    needs: build
+    runs-on: ubuntu-24.04
+
+    environment:
+      name: pypi
+      url: https://pypi.org/p/eolab-drones
+
+    permissions:
+      id-token: write
+
+    steps:
+      - name: Download distribution
+        uses: actions/download-artifact@v4
+        with:
+          name: eolab-drones-dist
+          path: dist/
+
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1

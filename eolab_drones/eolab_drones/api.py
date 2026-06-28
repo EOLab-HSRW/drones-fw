@@ -1,11 +1,14 @@
-from types import NoneType
 from typing import Union
-from pathlib import Path
-
-import easy_px4_utils
+from eolab_drones.type_defs import (
+    Catalog,
+    Drones,
+    DroneInfo,
+    Components
+)
 from eolab_drones.paths import DRONES_DIR, COMPONENTS_DIR
+import easy_px4_utils
 
-def get_catalog() -> dict[str, dict]:
+def get_catalog() -> Catalog:
     """
     Returns dictionary with EOLab's drones and components.
     """
@@ -21,52 +24,50 @@ def get_catalog() -> dict[str, dict]:
 
     return {"drones": drones, "components": components}
 
-def get_drones() -> dict[str, dict]:
+def get_drones() -> Union[Drones, None]:
     """
     Returns a dictionary with EOLab's drone catalog.
     """
     return get_catalog().get("drones")
 
-def get_drone(name: str) -> dict[str, dict]:
+def get_drone(name: str) -> Union[DroneInfo, None]:
     """
     Returns drones specific information
     """
-    return get_catalog().get("drones").get(name)
+    drones = get_drones()
+    if drones is not None:
+        return drones.get(name)
+    return None
 
-def get_components() -> list:
+def get_components() -> Union[Components, None]:
     """
     Returns list of names of EOLab's components.
     """
-    return get_catalog().get("components")
+    components = get_catalog().get("components")
+    if components is not None:
+        return components
+    return None
 
-def __check_drone(drone: str) -> Union[dict, NoneType]:
-    """
-    Checks if the given drone is in the catalog.
-    """
-
-    return get_drones().get(drone, None)
-
-
-def get_id(drone: str) -> Union[int, NoneType]:
+def get_id(drone_name: str) -> Union[int, None]:
     """
     Returns the id of a given drone in the EOLab's drone catalog.
 
 
     Return: int if the name of the drone is in the catalog, None otherwise.
     """
-    drone_info = __check_drone(drone)
-    if drone_info:
-        return drone_info["id"]
-    else:
-        return None
+    drone = get_drone(drone_name)
+    if drone is not None:
+        return int(drone["id"])
+    return None
 
-def get_drone_path(drone: str) -> str:
+def get_drone_path(drone_name: str) -> str:
     """
     Returns dictionary containing drone information.
     """
-    __check_drone(drone)
-
-    return str((DRONES_DIR / drone).resolve())
+    drone = get_drone(drone_name)
+    if drone is not None:
+        return str((DRONES_DIR / drone_name).resolve())
+    return ""
 
 def get_components_path() -> str:
     """
